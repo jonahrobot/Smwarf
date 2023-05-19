@@ -11,7 +11,10 @@ let config = {
     height: 480,
     autoCenter: true,
     backgroundColor: '#FCD581',
-    scene: [ Menu, Play ]
+    physics: {
+      default: 'matter',
+    },
+    scene: [ Play ]
   }
 
 let game = new Phaser.Game(config);
