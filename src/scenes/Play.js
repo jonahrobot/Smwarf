@@ -5,57 +5,68 @@ class Play extends Phaser.Scene{
 
     preload(){
         this.load.setPath("./assets/");
-        this.load.image('spr_hammer','hammer.png');
-        this.load.image('ball','spr_ball.png');
-        this.load.image('ground','ground.png');
-        this.load.image('hit_1','hitboxBig.png');
-        this.load.image('hit_2','hitboxSmall.png')
+
+        // Load Hammer assets
+        this.load.image('spr_hammer','spr_hammer.png');
+        this.load.image('spr_hitbox_large','spr_hitbox_large.png');
+        this.load.image('spr_hitbox_small','spr_hitbox_small.png')
+
+        // Load Environment assets
+        this.load.image('spr_ground','spr_ground.png');
 
         this.input.enabled = true;
     }
 
     create(){
-        
+        this.createHammer(420,0);
+    }
+ 
+    update(){
+        this.updateHammer();
+    }
+
+    createHammer(x,y){
+
         this.matter.world.setBounds();
 
-        const group1 = this.matter.world.nextCategory();
-
-        const group2 = this.matter.world.nextCategory();
-        const group3 = this.matter.world.nextCategory();
-
-        //  Our two bodies which will be connected by a constraint (aka a Joint or a Spring)
-        this.ballA = this.matter.add.image(400, 0, 'hit_1', null, { 
+        this.hitbox_large = this.matter.add.image(x-20, 0, 'spr_hitbox_large', null, { 
             shape: 'rectangle', friction: 0.005, restitution: 0.6
          }).setVisible(false);
 
-        this.ballB = this.matter.add.image(400, 400, 'hit_2', null, { 
+        this.hitbox_small = this.matter.add.image(x-20, y+400, 'spr_hitbox_small', null, { 
             shape: 'circle', friction: 0.005, restitution: 0.6,
          }).setVisible(false);
 
-        this.ground = this.matter.add.image(640/2, 480, 'ground', null, { 
+        this.ground = this.matter.add.image(640/2, 480, 'spr_ground', null, { 
             shape: 'rectangle',  isStatic:true
          });
 
+        // Create actual hammer
+        this.hammer = new Hammer(this,x,y,'spr_hammer');
 
-        this.hammer = new Hammer(this,420,0,'spr_hammer');
+        // Connect large and small hitbox
+        this.matter.add.joint(this.hitbox_large, this.hitbox_small, 64, 0.2);
 
-        this.matter.add.joint(this.ballA, this.ballB, 64, 0.2);
-
+        // Setup mouse interaction with Physics objects
         this.matter.add.mouseSpring({
             length: 0.01,
             stiffness: 1,
             angularStiffness: 1,
         });
+    }
 
-        }
+    updateHammer(){
+        // Prevent hitboxes from rotating, help makes cursor movement smooth and rigid to mouse pos
+        this.hitbox_large.angle = 0;
+        this.hitbox_small.angle = 0;
 
-    update(){
-        this.ballA.angle = 0;
-        this.ballB.angle = 0;
+        // Move Hammer to correct spot
+        this.hammer.x = this.hitbox_large.x;
+        this.hammer.y = this.hitbox_large.y;
 
-        this.hammer.x = this.ballA.x;
-        this.hammer.y = this.ballA.y;
-        this.hammer.angle = Phaser.Math.RadToDeg( Phaser.Math.Angle.Between(this.ballA.x,this.ballA.y,this.ballB.x,this.ballB.y)) - 90
+        // Rotate to face away from center point
+        let RadAngle = Phaser.Math.Angle.Between(this.hitbox_large.x,this.hitbox_large.y,this.hitbox_small.x,this.hitbox_small.y);
+        this.hammer.angle = Phaser.Math.RadToDeg(RadAngle) - 90;
     }
 }
 
