@@ -7,7 +7,7 @@ class Play extends Phaser.Scene{
         this.load.setPath("./assets/");
 
         // Load Hammer assets
-        this.load.image('spr_hammer','spr_hammer.png');
+        this.load.image('spr_hammer','Hammer.png');
         this.load.image('spr_hitbox_large','spr_hitbox_large.png');
         this.load.image('spr_hitbox_small','spr_hitbox_small.png')
 
@@ -42,10 +42,10 @@ class Play extends Phaser.Scene{
          });
 
         // Create actual hammer
-        this.hammer = new Hammer(this,x,y,'spr_hammer');
+        this.hammer = new Hammer(this,x,y,'spr_hammer').setScale(0.25);
 
         // Connect large and small hitbox
-        this.matter.add.joint(this.hitbox_large, this.hitbox_small, 64, 0.2);
+        this.matter.add.joint(this.hitbox_large, this.hitbox_small, 100, 0.2);
 
         // Setup mouse interaction with Physics objects
         this.matter.add.mouseSpring({
