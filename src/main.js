@@ -13,6 +13,7 @@ let config = {
     backgroundColor: '#FCD581',
     physics: {
       default: 'matter',
+      
     },
     scene: [ Play ]
   }

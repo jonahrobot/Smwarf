@@ -29,7 +29,7 @@ class Play extends Phaser.Scene{
          }).setVisible(false);
 
         this.ballB = this.matter.add.image(400, 400, 'hit_2', null, { 
-            shape: 'rectangle', friction: 0.005, restitution: 0.6
+            shape: 'circle', friction: 0.005, restitution: 0.6,
          }).setVisible(false);
 
         this.ground = this.matter.add.image(640/2, 480, 'ground', null, { 
@@ -41,7 +41,6 @@ class Play extends Phaser.Scene{
 
         this.matter.add.joint(this.ballA, this.ballB, 64, 0.2);
 
-        //  Or you can create a native Matter constraint:
         this.matter.add.mouseSpring({
             length: 0.01,
             stiffness: 1,
@@ -51,6 +50,9 @@ class Play extends Phaser.Scene{
         }
 
     update(){
+        this.ballA.angle = 0;
+        this.ballB.angle = 0;
+
         this.hammer.x = this.ballA.x;
         this.hammer.y = this.ballA.y;
         this.hammer.angle = Phaser.Math.RadToDeg( Phaser.Math.Angle.Between(this.ballA.x,this.ballA.y,this.ballB.x,this.ballB.y)) - 90
