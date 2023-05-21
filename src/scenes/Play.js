@@ -16,7 +16,9 @@ class Play extends Phaser.Scene{
 
         this.input.enabled = true;
 
-        var test = false;
+        this.apple = false;
+
+        this.currentRotation = false;
     }
 
     create(){
@@ -48,15 +50,9 @@ class Play extends Phaser.Scene{
 
         this.hammer.setInteractive();
 
-        this.hammer.on('pointerup', function (pointer)
-        {
-            this.test = false;
-        })
+        this.hammer.on('pointerup', ()=>{this.apple = false})
 
-        this.hammer.on('pointerdown', function (pointer)
-        {
-            this.test = true;
-        })  
+        this.hammer.on('pointerdown', ()=>{this.apple = true})  
 
         // Connect large and small hitbox
         this.matter.add.joint(this.hitbox_large, this.hitbox_small, 100, 0.2);
@@ -71,9 +67,13 @@ class Play extends Phaser.Scene{
 
     updateHammer(){
         // Prevent hitboxes from rotating, help makes cursor movement smooth and rigid to mouse pos
-        if(this.test == true){
-            console.log("Doing this")
-            this.hitbox_large.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(game.input.mousePointer.x,game.input.mousePointer.y,this.hitbox_small.x,this.hitbox_small.y));
+        if(this.apple == true){
+            if(this.hammer.angle > 0){
+                this.currentRotation = true;
+                this.hitbox_large.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(game.input.mousePointer.x,game.input.mousePointer.y,this.hitbox_small.x,this.hitbox_small.y)) + 180;
+            }else{
+                this.hitbox_large.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(game.input.mousePointer.x,game.input.mousePointer.y,this.hitbox_small.x,this.hitbox_small.y));
+            }
         }else{
             this.hitbox_large.angle = 0;
         }
