@@ -14,6 +14,10 @@ class Play extends Phaser.Scene{
         // Load Environment assets
         this.load.image('spr_ground','spr_ground.png');
 
+        // Load Sword Assets
+        this.load.image('sword', 'sword2.png')
+        this.load.image('star', 'star2.png')
+
         this.input.enabled = true;
 
         this.hammerFreezeRotation = false;
@@ -27,6 +31,22 @@ class Play extends Phaser.Scene{
  
     update(){
         this.updateHammer();
+
+        if(this.starDespawned){
+            this.starDespawned = false;
+            this.spawnStar = true;
+        }
+
+        if(this.spawnStar){
+            this.star1.x = this.sword1.x - 13 + (Math.random()*30)
+            this.star1.y = this.sword1.y + 40 - (Math.random()*140)
+            this.star1.angle = Math.random() * 90
+            this.spawnStar = false
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(keyR)){
+            this.despawnStar()
+        }
     }
 
     createHammer(x,y){
@@ -77,6 +97,19 @@ class Play extends Phaser.Scene{
             stiffness: 1,
             angularStiffness: 1,
         });
+
+        // Create sword
+        this.sword1 = this.add.image(game.config.width/2, game.config.height/2, 'sword').setScale(0.5)
+
+        this.star1 = this.matter.add.image(-50, -50, 'star', null, {
+            shape: 'rectangle', isStatic: true
+        }).setScale(0.1)
+
+        this.spawnStar = false;
+        this.starDespawned = true;
+
+        //keboard input
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     }
 
     updateHammer(){
@@ -100,6 +133,12 @@ class Play extends Phaser.Scene{
         // Rotate to face away from center point
         let RadAngle = Phaser.Math.Angle.Between(this.hitbox_small.x,this.hitbox_small.y,this.hitbox_large.x,this.hitbox_large.y);
         this.hammer.angle = Phaser.Math.RadToDeg(RadAngle) - 90;
+    }
+
+    despawnStar(){
+        this.star1.x = -50
+        this.star1.y = -50
+        this.starDespawned = true;
     }
 }
 
