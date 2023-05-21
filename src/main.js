@@ -10,9 +10,12 @@ let config = {
     width: 640,
     height: 480,
     autoCenter: true,
-    backgroundColor: '#FCD581',
+    backgroundColor: '#FF007F',
     physics: {
       default: 'matter',
+      matter: {
+        debug: true
+      }
     },
     scene: [ Play ]
   }

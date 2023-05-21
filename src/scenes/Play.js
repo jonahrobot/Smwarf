@@ -10,6 +10,8 @@ class Play extends Phaser.Scene{
         this.load.image('ground','ground.png');
         this.load.image('hit_1','hitboxBig.png');
         this.load.image('hit_2','hitboxSmall.png')
+        this.load.image('sword', 'sword2.png')
+        this.load.image('star', 'star2.png')
 
         this.input.enabled = true;
     }
@@ -47,13 +49,43 @@ class Play extends Phaser.Scene{
             stiffness: 1,
             angularStiffness: 1,
         });
+        
+        //make sword
+        /*this.sword1 = this.matter.add.image(game.config.width/2, game.config.height/2, 'sword', null, {
+            shape: "rectangle"
+        })*/
 
-        }
+        /*this.sword1 = this.matter.add.image(game.config.width/3, game.config.height/2, 'sword', null, { 
+            shape: 'rectangle',  isStatic:true
+         }).setScale(0.3)*/
+        
+        this.sword1 = this.add.image(game.config.width/2, game.config.height/2, 'sword').setScale(0.5)
+
+        this.star1 = this.matter.add.image(20, 20, 'star', null, {
+            shape: 'rectangle', isStatic: true
+        }).setScale(0.1)
+
+        this.spawnStar = false;
+        this.spawnDespawned = true;
+
+    }
 
     update(){
         this.hammer.x = this.ballA.x;
         this.hammer.y = this.ballA.y;
         this.hammer.angle = Phaser.Math.RadToDeg( Phaser.Math.Angle.Between(this.ballA.x,this.ballA.y,this.ballB.x,this.ballB.y)) - 90
+        
+        if(this.spawnDespawned){
+            this.spawnDespawned = false;
+            this.spawnStar = true;
+        }
+
+        if(this.spawnStar){
+            this.star1.x = this.sword1.x - 13 + (Math.random()*30)
+            this.star1.y = this.sword1.y + 40 - (Math.random()*140)
+            this.star1.angle = Math.random() * 90
+            this.spawnStar = false
+        }
     }
 }
 
