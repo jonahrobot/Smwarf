@@ -16,9 +16,9 @@ class Play extends Phaser.Scene{
 
         this.input.enabled = true;
 
-        this.apple = false;
+        this.hammerFreezeRotation = false;
 
-        this.currentRotation = false;
+        this.hammerCurrentRotation = false;
     }
 
     create(){
@@ -34,11 +34,11 @@ class Play extends Phaser.Scene{
         this.matter.world.setBounds();
 
         this.hitbox_large = this.matter.add.image(x-20, 0, 'spr_hitbox_large', null, { 
-            shape: 'rectangle', friction: 0.005, restitution: 0.6
+            shape: 'rectangle', friction: 0.005, restitution: 0.6, density: 0.01
          }).setVisible(false);
 
-        this.hitbox_small = this.matter.add.image(x-20, y+400, 'spr_hitbox_small', null, { 
-            shape: 'circle', friction: 0.005, restitution: 0.6,
+        this.hitbox_small = this.matter.add.image(x-200, y+400, 'spr_hitbox_small', null, { 
+            shape: 'circle', friction: 0.005, restitution: 0.6, density: 0.05
          }).setVisible(false);
 
         this.ground = this.matter.add.image(640/2, 480, 'spr_ground', null, { 
@@ -46,16 +46,30 @@ class Play extends Phaser.Scene{
          });
 
         // Create actual hammer
-        this.hammer = new Hammer(this,x,y,'spr_hammer').setScale(0.25);
+        this.hammer = new Hammer(this,x,y,'spr_hammer').setScale(0.25).setOrigin(0.5,0.1);
 
         this.hammer.setInteractive();
 
-        this.hammer.on('pointerup', ()=>{this.apple = false})
+        this.input.on('pointerup', ()=>{
+            this.hammerFreezeRotation = false;
+            if(this.hammer.angle < 0){
+                this.hammerCurrentRotation = true;
+            }else{
+                this.hammerCurrentRotation = false;
+            }
+        })
 
-        this.hammer.on('pointerdown', ()=>{this.apple = true})  
+        this.hammer.on('pointerdown', ()=>{
+            this.hammerFreezeRotation = true;
+            if(this.hammer.angle < 0){
+                this.hammerCurrentRotation = true;
+            }else{
+                this.hammerCurrentRotation = false;
+            }
+        })  
 
         // Connect large and small hitbox
-        this.matter.add.joint(this.hitbox_large, this.hitbox_small, 100, 0.2);
+        this.matter.add.joint(this.hitbox_large, this.hitbox_small, 150, 0.2);
 
         // Setup mouse interaction with Physics objects
         this.matter.add.mouseSpring({
@@ -67,9 +81,8 @@ class Play extends Phaser.Scene{
 
     updateHammer(){
         // Prevent hitboxes from rotating, help makes cursor movement smooth and rigid to mouse pos
-        if(this.apple == true){
-            if(this.hammer.angle > 0){
-                this.currentRotation = true;
+        if(this.hammerFreezeRotation == true){
+            if(this.hammerCurrentRotation == true){
                 this.hitbox_large.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(game.input.mousePointer.x,game.input.mousePointer.y,this.hitbox_small.x,this.hitbox_small.y)) + 180;
             }else{
                 this.hitbox_large.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(game.input.mousePointer.x,game.input.mousePointer.y,this.hitbox_small.x,this.hitbox_small.y));
@@ -77,14 +90,15 @@ class Play extends Phaser.Scene{
         }else{
             this.hitbox_large.angle = 0;
         }
+
         this.hitbox_small.angle = 0;
 
         // Move Hammer to correct spot
-        this.hammer.x = this.hitbox_large.x;
-        this.hammer.y = this.hitbox_large.y;
+        this.hammer.x = this.hitbox_small.x;
+        this.hammer.y = this.hitbox_small.y;
 
         // Rotate to face away from center point
-        let RadAngle = Phaser.Math.Angle.Between(this.hitbox_large.x,this.hitbox_large.y,this.hitbox_small.x,this.hitbox_small.y);
+        let RadAngle = Phaser.Math.Angle.Between(this.hitbox_small.x,this.hitbox_small.y,this.hitbox_large.x,this.hitbox_large.y);
         this.hammer.angle = Phaser.Math.RadToDeg(RadAngle) - 90;
     }
 }
