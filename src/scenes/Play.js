@@ -108,9 +108,9 @@ class Play extends Phaser.Scene{
             shape: 'circle', friction: 0.005, restitution: 0.6, density: 0.05, label: 'hammerHead'
          }).setVisible(false);
 
-        this.ground = this.matter.add.image(640/2, 480, 'spr_ground', null, { 
+        this.ground = this.matter.add.image(896/2, 656, 'spr_ground', null, { 
             shape: 'rectangle',  isStatic:true
-         });
+         }).setScale(2);
 
         // Create actual hammer
         this.hammer = new Hammer(this,x,y,'spr_hammer').setScale(0.25).setOrigin(0.5,0.1).setDepth(10);

@@ -7,8 +7,8 @@ Authors: Dylan Louie, Abel Goy, Jonah Ryan
 'use strict';
 let config = {
     type: Phaser.AUTO,
-    width: 640,
-    height: 480,
+    width: 896,
+    height: 640,
     autoCenter: true,
     backgroundColor: '#D5DCF9',
     physics: {
