@@ -61,12 +61,16 @@ class Play extends Phaser.Scene{
         
         this.sword1 = this.add.image(game.config.width/2, game.config.height/2, 'sword').setScale(0.5)
 
-        this.star1 = this.matter.add.image(20, 20, 'star', null, {
+        this.star1 = this.matter.add.image(-50, -50, 'star', null, {
             shape: 'rectangle', isStatic: true
         }).setScale(0.1)
 
         this.spawnStar = false;
-        this.spawnDespawned = true;
+        this.starDespawned = true;
+
+        //keboard input
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        
 
     }
 
@@ -75,8 +79,8 @@ class Play extends Phaser.Scene{
         this.hammer.y = this.ballA.y;
         this.hammer.angle = Phaser.Math.RadToDeg( Phaser.Math.Angle.Between(this.ballA.x,this.ballA.y,this.ballB.x,this.ballB.y)) - 90
         
-        if(this.spawnDespawned){
-            this.spawnDespawned = false;
+        if(this.starDespawned){
+            this.starDespawned = false;
             this.spawnStar = true;
         }
 
@@ -86,6 +90,17 @@ class Play extends Phaser.Scene{
             this.star1.angle = Math.random() * 90
             this.spawnStar = false
         }
+
+        if(Phaser.Input.Keyboard.JustDown(keyR)){
+            this.despawnStar()
+        }
+        //this.star1.setOnCollideWith(hammer.body, despawnStar())
+    }
+
+    despawnStar(){
+        this.star1.x = -50
+        this.star1.y = -50
+        this.starDespawned = true;
     }
 }
 
