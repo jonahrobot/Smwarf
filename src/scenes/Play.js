@@ -66,7 +66,7 @@ class Play extends Phaser.Scene{
          });
 
         // Create actual hammer
-        this.hammer = new Hammer(this,x,y,'spr_hammer').setScale(0.25).setOrigin(0.5,0.1);
+        this.hammer = new Hammer(this,x,y,'spr_hammer').setScale(0.25).setOrigin(0.5,0.1).setDepth(10);
 
         this.hammer.setInteractive();
 
@@ -99,10 +99,10 @@ class Play extends Phaser.Scene{
         });
 
         // Create sword
-        this.sword1 = this.add.image(game.config.width/2, game.config.height/2, 'sword').setScale(0.5)
+        this.sword1 = this.add.image(game.config.width/4, game.config.height/2, 'sword').setScale(0.5)
 
         this.star1 = this.matter.add.image(-50, -50, 'star', null, {
-            shape: 'rectangle', isStatic: true
+            shape: 'rectangle', isStatic: true, isSensor: true,
         }).setScale(0.1)
 
         this.spawnStar = false;
