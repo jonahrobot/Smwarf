@@ -15,6 +15,8 @@ class Play extends Phaser.Scene{
         this.load.image('spr_ground','spr_ground.png');
 
         this.input.enabled = true;
+
+        var test = false;
     }
 
     create(){
@@ -44,6 +46,18 @@ class Play extends Phaser.Scene{
         // Create actual hammer
         this.hammer = new Hammer(this,x,y,'spr_hammer').setScale(0.25);
 
+        this.hammer.setInteractive();
+
+        this.hammer.on('pointerup', function (pointer)
+        {
+            this.test = false;
+        })
+
+        this.hammer.on('pointerdown', function (pointer)
+        {
+            this.test = true;
+        })  
+
         // Connect large and small hitbox
         this.matter.add.joint(this.hitbox_large, this.hitbox_small, 100, 0.2);
 
@@ -57,7 +71,12 @@ class Play extends Phaser.Scene{
 
     updateHammer(){
         // Prevent hitboxes from rotating, help makes cursor movement smooth and rigid to mouse pos
-        this.hitbox_large.angle = 0;
+        if(this.test == true){
+            console.log("Doing this")
+            this.hitbox_large.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(game.input.mousePointer.x,game.input.mousePointer.y,this.hitbox_small.x,this.hitbox_small.y));
+        }else{
+            this.hitbox_large.angle = 0;
+        }
         this.hitbox_small.angle = 0;
 
         // Move Hammer to correct spot
