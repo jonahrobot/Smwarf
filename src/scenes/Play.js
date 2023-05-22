@@ -138,12 +138,23 @@ class Play extends Phaser.Scene{
             this.spawnStar = true;
             this.prog++;
             console.log(this.prog);
-            if (this.prog == 1) {
+            if (this.prog == 0) {
+                this.progUI1.setVisible(false);
+                this.progUI2.setVisible(false);
+                this.progUI3.setVisible(false);
+                this.progUI4.setVisible(false);
+            } else if (this.prog == 1) {
                 this.progUI1.setVisible(true);
+                this.progUI2.setVisible(false);
+                this.progUI3.setVisible(false);
+                this.progUI4.setVisible(false);
             } else if (this.prog == 2) {
                 this.progUI2.setVisible(true);
+                this.progUI3.setVisible(false);
+                this.progUI4.setVisible(false);
             } else if (this.prog == 3) {
                 this.progUI3.setVisible(true);
+                this.progUI4.setVisible(false);
             } else if (this.prog == 4) {
                 this.progUI4.setVisible(true);
             }
@@ -160,6 +171,10 @@ class Play extends Phaser.Scene{
             }   
 
             this.star1.angle = Math.random() * 90
+            this.star2.x = this.star1.x
+            this.star2.y = this.star1.y
+            this.star2.angle = this.star1.angle
+
             this.spawnStar = false
         }
 
@@ -206,8 +221,11 @@ class Play extends Phaser.Scene{
                         if(blockBody.velocity.x > 2 || blockBody.velocity.y > 2 ){
                             this.clock = this.time.delayedCall(100, () => {
                                 this.despawnStar()
-                                this.despawnSword(this.sword1)
-                                this.despawnSword(this.sword2)
+                                if(this.prog == 4){
+                                    this.despawnSword(this.sword1)
+                                    this.despawnSword(this.sword2)
+                                    this.prog=-1
+                                }
                             }, null, this)
 
                         }
