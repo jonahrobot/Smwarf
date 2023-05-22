@@ -50,7 +50,7 @@ class Play extends Phaser.Scene{
     }
 
     create(){
-        this.createHammer(420,0);
+        this.createHammer(800,0);
 
         // Connect large and small hitbox
         this.matter.add.joint(this.hitbox_large, this.hitbox_small, 150, 0.2);
@@ -117,10 +117,10 @@ class Play extends Phaser.Scene{
         this.setupCollision();
 
         // Set up combo meter
-        this.scoreLeft = this.add.text(896 - 128, 32,this.totalSwordsBuilt + " sword", this.mainText).setOrigin(0.5,0.5)
+        this.scoreLeft = this.add.text(896 - 150, 32,this.totalSwordsBuilt + " sword", this.mainText).setOrigin(0.5,0.5)
         this.mainText.fontSize = 40;
         this.mainText.color = '#4D5558'
-        this.combo = this.add.text(896 - 128, 64 + 12,"", this.mainText).setOrigin(0.5,0.5);
+        this.combo = this.add.text(896 - 150, 64 + 12,"", this.mainText).setOrigin(0.5,0.5);
     }
  
     update(){
@@ -165,7 +165,7 @@ class Play extends Phaser.Scene{
 
                 if(this.currentCombo != 0){
                     this.combo.text = "Combo Lost";
-                    this.time.delayedCall(600, () => { this.combo.text = ""; }, null, this)
+                    this.time.delayedCall(600, () => { this.combo.text = "Max: " + this.largestCombo; }, null, this)
                 }
 
                 this.hammerMissFlint = false;
