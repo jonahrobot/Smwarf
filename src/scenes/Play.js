@@ -23,11 +23,29 @@ class Play extends Phaser.Scene{
         this.hammerFreezeRotation = false;
 
         this.hammerCurrentRotation = false;
+
+        // Set up combo font
+        this.currentCombo = 0;
+        this.timer = 1000;
+        this.timerStartVal = 1000;
+
+        // display score
+        this.mainText = {
+            fontFamily: 'font1',
+            fontSize: '48px',
+            color: '#313638',
+            align: 1
+        }
     }
 
     create(){
         this.createHammer(420,0);
         this.setupCollision();
+
+        // Set up combo meter
+        this.scoreLeft = this.add.text(896 - 128, 32,this.currentCombo + "x HITS", this.mainText).setOrigin(0.5,0.5);
+        this.timerRec = this.add.rectangle(896 - 128 - this.scoreLeft.width / 2, 64, this.scoreLeft.width, 8, 'red').setOrigin(0,0);
+        this.timerSize = this.scoreLeft.width;
     }
  
     update(){
@@ -47,7 +65,11 @@ class Play extends Phaser.Scene{
 
         if(Phaser.Input.Keyboard.JustDown(keyR)){
             this.despawnStar()
-        }
+        }    
+
+        // Alter timer
+        this.timer -= 1;
+        this.timerRec.width = (this.timer / this.timerStartVal) * this.timerSize;
     }
 
     setupCollision(){
@@ -87,6 +109,10 @@ class Play extends Phaser.Scene{
                     if(blockBody.label === 'hammerHead'){
                         if(blockBody.velocity.x > 2 || blockBody.velocity.y > 2 ){
                             this.despawnStar()
+
+                            this.currentCombo += 1;
+                            this.scoreLeft.text = this.currentCombo + "x HITS";
+                            this.timer = this.timerStartVal;
                         }
                     }
                 }
