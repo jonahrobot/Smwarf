@@ -28,9 +28,16 @@ class Play extends Phaser.Scene{
         this.hammerCurrentRotation = false;
 
         // Set up combo font
+        this.totalSwordsBuilt = 0;
         this.currentCombo = 0;
-        this.timer = 1000;
-        this.timerStartVal = 1000;
+        this.largestCombo = 0;
+
+        // Set up hammer miss tracker
+        this.hammerMissFlint = false // Flips to true when hammer sticking up, about to swing down
+        // Once hammer goes down, if above variable is still true then combo resets. set back to false when star hit
+
+        this.hammerflipProtection = false;
+        // This enables once you hit a star, the hammer must point bottom to disable.
 
         // display score
         this.mainText = {
@@ -83,15 +90,15 @@ class Play extends Phaser.Scene{
         this.prog = 0;
         var textConfig = { 
             fontFamily: 'font1',
-        fontSize: '28px',
-        backgroundColor: '#24DB00',
-        color: '#000000',
-        align: 'center',
-        padding: {
-            top: 5,
-            bottom: 5,
-        },
-        fixedWidth: 25
+            fontSize: '28px',
+            backgroundColor: '#24DB00',
+            color: '#000000',
+            align: 'center',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 25
         }
         this.progUI1 = this.add.text(game.config.width/4 - 25, game.config.height/8, "", textConfig).setOrigin(0.5);
         this.progUI2 = this.add.text(game.config.width/4, game.config.height/8, "", textConfig).setOrigin(0.5);
@@ -106,9 +113,10 @@ class Play extends Phaser.Scene{
         this.setupCollision();
 
         // Set up combo meter
-        this.scoreLeft = this.add.text(896 - 128, 32,this.currentCombo + "x HITS", this.mainText).setOrigin(0.5,0.5);
-        this.timerRec = this.add.rectangle(896 - 128 - this.scoreLeft.width / 2, 64, this.scoreLeft.width, 8, 'red').setOrigin(0,0);
-        this.timerSize = this.scoreLeft.width;
+        this.scoreLeft = this.add.text(896 - 128, 32,this.totalSwordsBuilt + " sword", this.mainText).setOrigin(0.5,0.5)
+        this.mainText.fontSize = 40;
+        this.mainText.color = '#4D5558'
+        this.combo = this.add.text(896 - 128, 64 + 12,"", this.mainText).setOrigin(0.5,0.5);
     }
  
     update(){
@@ -122,12 +130,6 @@ class Play extends Phaser.Scene{
             } else{
                 this.spawnSword2 = true;
             }
-            
-            //condition to spawn sword1
-            /*if(this.sword1Despawned){
-                this.sword1Despawned = false;
-                this.spawnSword1 = true;
-            }*/
 
             if(this.spawnSword1){
                 this.sword1.x = game.config.width/4
@@ -136,12 +138,6 @@ class Play extends Phaser.Scene{
                 this.spawnSword1 = false
             }
 
-            //condition to spawn sword2
-            /*if(this.sword2Despawned){
-                this.sword2Despawned = false;
-                this.spawnSword2 = true;
-            }*/
-
             if(this.spawnSword2){
                 this.sword2.x = game.config.width/4
                 this.sword2.y = game.config.height/2
@@ -149,6 +145,36 @@ class Play extends Phaser.Scene{
                 this.spawnSword2 = false
             }
         }
+
+        // Check if hammer missed
+        if(Math.abs(this.hammer.angle) < 25){
+            if(this.hammerflipProtection == false){
+                this.hammerMissFlint = true;
+            }
+        }
+        
+        if(Math.abs(this.hammer.angle) > 165){
+            if(this.hammerMissFlint == true && this.hammerflipProtection == false){
+                if(this.currentCombo > this.largestCombo){
+                    this.largestCombo = this.currentCombo;
+                }
+
+                if(this.currentCombo != 0){
+                    this.combo.text = "Combo Lost";
+                    this.time.delayedCall(600, () => { this.combo.text = ""; }, null, this)
+                }
+
+                this.hammerMissFlint = false;
+                this.currentCombo = 0;
+            }
+
+            if(this.hammerflipProtection == true){
+                this.hammerMissFlint = false;
+                this.hammerflipProtection = false;
+            }
+        }
+        
+        
 
         //condition to spawn star
         if(this.starDespawned){
@@ -199,10 +225,6 @@ class Play extends Phaser.Scene{
         if(Phaser.Input.Keyboard.JustDown(keyR)){
             this.despawnStar()
         }    
-
-        // Alter timer
-        this.timer -= 1;
-        this.timerRec.width = (this.timer / this.timerStartVal) * this.timerSize;
     }
 
     setupCollision(){
@@ -242,17 +264,21 @@ class Play extends Phaser.Scene{
                     if(blockBody.label === 'hammerHead'){
                         if(blockBody.velocity.x > 2 || blockBody.velocity.y > 2 ){
 
-
-                            this.currentCombo += 1;
-                            this.scoreLeft.text = this.currentCombo + "x HITS";
-                            this.timer = this.timerStartVal;
-
                             this.clock = this.time.delayedCall(100, () => {
+                                
+                                this.currentCombo += 1;
+                                this.combo.text = this.currentCombo + "x";
+                                this.hammerMissFlint = false;
+                                this.hammerflipProtection = true;
+                                
                                 this.despawnStar()
                                 if(this.prog == 4){
                                     this.despawnSword(this.sword1)
                                     this.despawnSword(this.sword2)
                                     this.prog=-1
+
+                                    this.totalSwordsBuilt += 1;
+                                    this.scoreLeft.text = this.totalSwordsBuilt + " sword";
                                 }
                             }, null, this)
                          }
