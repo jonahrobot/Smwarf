@@ -29,7 +29,7 @@ class Menu extends Phaser.Scene{
     this.add.text(game.config.width/2, game.config.height/2, 'Click on the hammer handle and swing it', menuConfig).setOrigin(0.5);
     //menuConfig.backgroundColor = '#A50B5E';
     menuConfig.color = '#000';
-    this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, '→ to start game', menuConfig).setOrigin(0.5);
+    this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'hit the -> button', menuConfig).setOrigin(0.5);
 
     // define keys
     keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -38,7 +38,7 @@ class Menu extends Phaser.Scene{
 
   update() {
     if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-      this.scene.start('playScene');    
+      this.scene.start('tutorialScene');    
     }
   }
 }
