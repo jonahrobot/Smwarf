@@ -27,6 +27,36 @@ class Play extends Phaser.Scene{
 
     create(){
         this.createHammer(420,0);
+
+        // Connect large and small hitbox
+        this.matter.add.joint(this.hitbox_large, this.hitbox_small, 150, 0.2);
+
+        // Setup mouse interaction with Physics objects
+        this.matter.add.mouseSpring({
+            length: 0.01,
+            stiffness: 1,
+            angularStiffness: 1,
+        });
+
+        // Create sword
+        this.sword1 = this.add.image(game.config.width/4, game.config.height/2, 'sword').setScale(0.5)
+
+        this.star1 = this.matter.add.image(-50, -50, 'star', null, {
+            shape: 'rectangle', isStatic: true, isSensor: true,
+        }).setScale(0.1)
+
+        this.star2 = this.matter.add.image(-50, -50, 'star', null, {
+            shape: 'rectangle', isStatic: true,
+        }).setScale(0.1)
+
+        this.star2.alpha = 0
+
+        this.spawnStar = false;
+        this.starDespawned = true;
+
+        //keboard input
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+
         this.setupCollision();
     }
  
@@ -42,6 +72,10 @@ class Play extends Phaser.Scene{
             this.star1.x = this.sword1.x - 13 + (Math.random()*30)
             this.star1.y = this.sword1.y + 40 - (Math.random()*140)
             this.star1.angle = Math.random() * 90
+            this.star2.x = this.star1.x
+            this.star2.y = this.star1.y
+            this.star1.angle = this.star2.angle
+
             this.spawnStar = false
         }
 
@@ -86,7 +120,10 @@ class Play extends Phaser.Scene{
 
                     if(blockBody.label === 'hammerHead'){
                         if(blockBody.velocity.x > 2 || blockBody.velocity.y > 2 ){
-                            this.despawnStar()
+                            this.clock = this.time.delayedCall(100, () => {
+                                this.despawnStar()
+                            }, null, this)
+
                         }
                     }
                 }
@@ -135,28 +172,6 @@ class Play extends Phaser.Scene{
             }
         })  
 
-        // Connect large and small hitbox
-        this.matter.add.joint(this.hitbox_large, this.hitbox_small, 150, 0.2);
-
-        // Setup mouse interaction with Physics objects
-        this.matter.add.mouseSpring({
-            length: 0.01,
-            stiffness: 1,
-            angularStiffness: 1,
-        });
-
-        // Create sword
-        this.sword1 = this.add.image(game.config.width/4, game.config.height/2, 'sword').setScale(0.5)
-
-        this.star1 = this.matter.add.image(-50, -50, 'star', null, {
-            shape: 'rectangle', isStatic: true, isSensor: true,
-        }).setScale(0.1)
-
-        this.spawnStar = false;
-        this.starDespawned = true;
-
-        //keboard input
-        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     }
 
     updateHammer(){
@@ -185,8 +200,11 @@ class Play extends Phaser.Scene{
     despawnStar(){
         this.star1.x = -50
         this.star1.y = -50
+        this.star2.x = -50
+        this.star2.y = -50
         this.starDespawned = true;
     }
+
 }
 
 

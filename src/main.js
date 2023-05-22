@@ -6,7 +6,7 @@ Authors: Dylan Louie, Abel Goy, Jonah Ryan
 
 'use strict';
 let config = {
-    type: Phaser.AUTO,
+    type: Phaser.CANVAS,
     width: 896,
     height: 640,
     autoCenter: true,
@@ -17,7 +17,7 @@ let config = {
         debug: false
       }
     },
-    scene: [ Menu, Play ]
+    scene: [ Menu, Tutorial, Play ]
   }
 
 let game = new Phaser.Game(config);
