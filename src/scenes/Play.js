@@ -129,7 +129,7 @@ class Play extends Phaser.Scene{
         //randomize spawning sword
         if(this.sword1Despawned && this.sword2Despawned){   
             
-            if(Math.floor(Math.random()*2) == 0){
+            if(Math.floor(Math.random()*2) == 1){
                 this.spawnSword1 = true;
             } else{
                 this.spawnSword2 = true;
@@ -214,8 +214,8 @@ class Play extends Phaser.Scene{
                 this.star1.y = this.sword1.y + 40 - (Math.random()*140)
             }   
             if(!this.sword2Despawned){
-                this.star1.x = this.sword2.x - 13 + (Math.random()*30)
-                this.star1.y = this.sword2.y + 40 - (Math.random()*140)
+                this.star1.x = this.sword2.x - 30 + (Math.random()*80)
+                this.star1.y = this.sword2.y + 75 - (Math.random()*220)
             }   
 
             this.star1.angle = Math.random() * 90
