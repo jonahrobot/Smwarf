@@ -15,7 +15,10 @@ class Play extends Phaser.Scene{
         this.load.image('spr_ground','spr_ground.png');
 
         // Load Sword Assets
-        this.load.image('sword', 'sword2.png')
+        this.load.image('sword1', 'sword2.png')
+
+        this.load.image('sword2', 'sword3.png')
+        
         this.load.image('star', 'star2.png')
 
         this.input.enabled = true;
@@ -39,11 +42,13 @@ class Play extends Phaser.Scene{
         });
 
         // Create sword
-        this.sword1 = this.add.image(game.config.width/4, game.config.height/2, 'sword').setScale(0.5)
+        this.sword1 = this.add.image(-100, game.config.height/2, 'sword1').setScale(0.5)
+
+        this.sword2 = this.add.image(-100, game.config.height/2, 'sword2').setScale(0.5)
 
         this.star1 = this.matter.add.image(-50, -50, 'star', null, {
             shape: 'rectangle', isStatic: true, isSensor: true,
-        }).setScale(0.1)
+        }).setScale(0.1).setDepth(10)
 
         this.star2 = this.matter.add.image(-50, -50, 'star', null, {
             shape: 'rectangle', isStatic: true,
@@ -54,6 +59,11 @@ class Play extends Phaser.Scene{
         this.spawnStar = false;
         this.starDespawned = true;
 
+        this.spawnSword1 = false;
+        this.spawnSword2 = false;
+        this.sword1Despawned = true;
+        this.sword2Despawned = true;
+
         //keboard input
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
@@ -62,21 +72,65 @@ class Play extends Phaser.Scene{
  
     update(){
         this.updateHammer();
+        
+        //randomize spawning sword
+        if(this.sword1Despawned && this.sword2Despawned){   
+            
+            if(Math.floor(Math.random()*2) == 0){
+                this.spawnSword1 = true;
+            } else{
+                this.spawnSword2 = true;
+            }
+            
+            //condition to spawn sword1
+            /*if(this.sword1Despawned){
+                this.sword1Despawned = false;
+                this.spawnSword1 = true;
+            }*/
 
-        if(this.starDespawned){
-            this.starDespawned = false;
-            this.spawnStar = true;
-        }
+            if(this.spawnSword1){
+                this.sword1.x = game.config.width/4
+                this.sword1.y = game.config.height/2
+                this.sword1Despawned = false;
+                this.spawnSword1 = false
+            }
 
-        if(this.spawnStar){
-            this.star1.x = this.sword1.x - 13 + (Math.random()*30)
-            this.star1.y = this.sword1.y + 40 - (Math.random()*140)
-            this.star1.angle = Math.random() * 90
-            this.star2.x = this.star1.x
-            this.star2.y = this.star1.y
-            this.star1.angle = this.star2.angle
+            //condition to spawn sword2
+            /*if(this.sword2Despawned){
+                this.sword2Despawned = false;
+                this.spawnSword2 = true;
+            }*/
 
-            this.spawnStar = false
+            if(this.spawnSword2){
+                this.sword2.x = game.config.width/4
+                this.sword2.y = game.config.height/2
+                this.sword2Despawned = false;
+                this.spawnSword2 = false
+            }
+
+            //condition to spawn star
+            if(this.starDespawned){
+                this.starDespawned = false;
+                this.spawnStar = true;
+            }
+
+            if(this.spawnStar){
+                if(!this.sword1Despawned){
+                    this.star1.x = this.sword1.x - 13 + (Math.random()*30)
+                    this.star1.y = this.sword1.y + 40 - (Math.random()*140)
+                }   
+                if(!this.sword2Despawned){
+                    this.star1.x = this.sword2.x - 13 + (Math.random()*30)
+                    this.star1.y = this.sword2.y + 40 - (Math.random()*140)
+                }     
+            
+                this.star1.angle = Math.random() * 90
+                this.star2.x = this.star1.x
+                this.star2.y = this.star1.y
+                this.star1.angle = this.star2.angle
+
+                this.spawnStar = false
+            }
         }
 
         if(Phaser.Input.Keyboard.JustDown(keyR)){
@@ -122,6 +176,8 @@ class Play extends Phaser.Scene{
                         if(blockBody.velocity.x > 2 || blockBody.velocity.y > 2 ){
                             this.clock = this.time.delayedCall(100, () => {
                                 this.despawnStar()
+                                this.despawnSword(this.sword1)
+                                this.despawnSword(this.sword2)
                             }, null, this)
 
                         }
@@ -203,6 +259,16 @@ class Play extends Phaser.Scene{
         this.star2.x = -50
         this.star2.y = -50
         this.starDespawned = true;
+    }
+
+    despawnSword(sword){
+        sword.x = -100
+        if(sword = this.sword1){    
+            this.sword1Despawned = true
+        }
+        if(sword = this.sword2){    
+            this.sword2Despawned = true
+        }
     }
 
 }
