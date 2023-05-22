@@ -67,6 +67,29 @@ class Play extends Phaser.Scene{
         //keboard input
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
+        this.prog = 0;
+        var textConfig = { 
+            fontFamily: 'font1',
+        fontSize: '28px',
+        backgroundColor: '#24DB00',
+        color: '#000000',
+        align: 'center',
+        padding: {
+            top: 5,
+            bottom: 5,
+        },
+        fixedWidth: 25
+        }
+        this.progUI1 = this.add.text(game.config.width/4 - 25, game.config.height/8, "", textConfig).setOrigin(0.5);
+        this.progUI2 = this.add.text(game.config.width/4, game.config.height/8, "", textConfig).setOrigin(0.5);
+        this.progUI3 = this.add.text(game.config.width/4 + 25, game.config.height/8, "", textConfig).setOrigin(0.5);
+        this.progUI4 = this.add.text(game.config.width/4 + 50, game.config.height/8, "", textConfig).setOrigin(0.5);
+        this.progUI1.setVisible(false);
+        this.progUI2.setVisible(false);
+        this.progUI3.setVisible(false);
+        this.progUI4.setVisible(false);
+        this.prog = -1;
+        //this.createHammer(500,0);
         this.setupCollision();
     }
  
@@ -107,30 +130,37 @@ class Play extends Phaser.Scene{
                 this.sword2Despawned = false;
                 this.spawnSword2 = false
             }
+        }
 
-            //condition to spawn star
-            if(this.starDespawned){
-                this.starDespawned = false;
-                this.spawnStar = true;
+        //condition to spawn star
+        if(this.starDespawned){
+            this.starDespawned = false;
+            this.spawnStar = true;
+            this.prog++;
+            console.log(this.prog);
+            if (this.prog == 1) {
+                this.progUI1.setVisible(true);
+            } else if (this.prog == 2) {
+                this.progUI2.setVisible(true);
+            } else if (this.prog == 3) {
+                this.progUI3.setVisible(true);
+            } else if (this.prog == 4) {
+                this.progUI4.setVisible(true);
             }
+        }
 
-            if(this.spawnStar){
-                if(!this.sword1Despawned){
-                    this.star1.x = this.sword1.x - 13 + (Math.random()*30)
-                    this.star1.y = this.sword1.y + 40 - (Math.random()*140)
-                }   
-                if(!this.sword2Despawned){
-                    this.star1.x = this.sword2.x - 13 + (Math.random()*30)
-                    this.star1.y = this.sword2.y + 40 - (Math.random()*140)
-                }     
-            
-                this.star1.angle = Math.random() * 90
-                this.star2.x = this.star1.x
-                this.star2.y = this.star1.y
-                this.star1.angle = this.star2.angle
+        if(this.spawnStar){
+            if(!this.sword1Despawned){
+                this.star1.x = this.sword1.x - 13 + (Math.random()*30)
+                this.star1.y = this.sword1.y + 40 - (Math.random()*140)
+            }   
+            if(!this.sword2Despawned){
+                this.star1.x = this.sword2.x - 13 + (Math.random()*30)
+                this.star1.y = this.sword2.y + 40 - (Math.random()*140)
+            }   
 
-                this.spawnStar = false
-            }
+            this.star1.angle = Math.random() * 90
+            this.spawnStar = false
         }
 
         if(Phaser.Input.Keyboard.JustDown(keyR)){
@@ -227,6 +257,16 @@ class Play extends Phaser.Scene{
                 this.hammerCurrentRotation = false;
             }
         })  
+
+        // Connect large and small hitbox
+        this.matter.add.joint(this.hitbox_large, this.hitbox_small, 150, 0.2);
+
+        // Setup mouse interaction with Physics objects
+        this.matter.add.mouseSpring({
+            length: 0.01,
+            stiffness: 1,
+            angularStiffness: 1,
+        });
 
     }
 
