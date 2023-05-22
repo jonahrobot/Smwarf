@@ -8,6 +8,7 @@ class Play extends Phaser.Scene{
 
         // Load Hammer assets
         this.load.image('spr_hammer','Hammer.png');
+        this.load.image('spr_anvil','anvil.png');
         this.load.image('spr_hitbox_large','spr_hitbox_large.png');
         this.load.image('spr_hitbox_small','spr_hitbox_small.png')
 
@@ -62,6 +63,9 @@ class Play extends Phaser.Scene{
         });
 
         // Create sword
+
+        this.add.image(220, game.config.height/2, 'spr_anvil').setScale(0.5)
+
         this.sword1 = this.add.image(-100, game.config.height/2, 'sword1').setScale(0.5)
 
         this.sword2 = this.add.image(-100, game.config.height/2, 'sword2').setScale(0.5)
