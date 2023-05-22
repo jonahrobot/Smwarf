@@ -27,3 +27,6 @@ let keyR, keyRIGHT, keyLEFT
 // set UI sizes
 let borderUISize = game.config.height / 15
 let borderPadding = borderUISize / 3
+
+let highestScore = 0
+let highestCombo = 0
