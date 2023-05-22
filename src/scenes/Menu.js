@@ -25,11 +25,12 @@ class Menu extends Phaser.Scene{
     //show menu text
     this.add.text(game.config.width/2, game.config.height/2 - borderUISize*2 - borderPadding*2, 'Smwarf!', menuConfig).setOrigin(0.5);
     
-    menuConfig.fontSize = '20px' 
-    this.add.text(game.config.width/2, game.config.height/2, 'Click on the hammer handle and swing it', menuConfig).setOrigin(0.5);
+    menuConfig.fontSize = '20px'
+
+    this.add.text(game.config.width/2, game.config.height/2, 'By Jonah Ryan, Abel Goy, Dylan Louie', menuConfig).setOrigin(0.5);
     //menuConfig.backgroundColor = '#A50B5E';
     menuConfig.color = '#000';
-    this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'hit the -> button', menuConfig).setOrigin(0.5);
+    this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Press the -> button to continue', menuConfig).setOrigin(0.5);
 
     // define keys
     keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
