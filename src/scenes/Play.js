@@ -47,6 +47,8 @@ class Play extends Phaser.Scene{
             color: '#313638',
             align: 1
         }
+
+
     }
 
     create(){
@@ -120,7 +122,24 @@ class Play extends Phaser.Scene{
         this.scoreLeft = this.add.text(896 - 150, 32,this.totalSwordsBuilt + " sword", this.mainText).setOrigin(0.5,0.5)
         this.mainText.fontSize = 40;
         this.mainText.color = '#4D5558'
-        this.combo = this.add.text(896 - 150, 64 + 12,"", this.mainText).setOrigin(0.5,0.5);
+        this.combo = this.add.text(896 - 150, 64 + 12 + 46,"", this.mainText).setOrigin(0.5,0.5);
+
+        //clock
+        this.clockTime = 60;
+        this.clockRightCounter = Math.floor(this.clockTime);
+        this.addedTime = 0;
+        this.scoreRight = this.add.text(896 - 150, 64 + 12, this.clockRightCounter + ' seconds', this.mainText).setOrigin(0.5,0.5);
+        //this.scoreRight.fixedWidth = 0;
+        //this.scoreRight.align = 'right';
+
+        this.initTime = this.time.now;
+        
+
+        //game over variable
+        this.gameOver = false;
+
+        
+
     }
  
     update(){
@@ -229,6 +248,16 @@ class Play extends Phaser.Scene{
         if(Phaser.Input.Keyboard.JustDown(keyR)){
             this.despawnStar()
         }    
+
+        //clock
+        if(!this.gameOver){
+            this.clockRightCounter = Math.floor(this.clockTime) - Math.floor((this.time.now-this.initTime)/1000) + Math.floor(this.addedTime);
+            this.scoreRight.text = this.clockRightCounter + ' seconds';
+        }
+        if(this.clockRightCounter <= 0){
+            this.clockRightCounter = 0
+            this.gameOver = true
+        }
     }
 
     setupCollision(){
