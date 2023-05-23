@@ -4,7 +4,23 @@ class Menu extends Phaser.Scene{
   }
 
   preload(){
-  
+    this.load.setPath("./assets/");
+
+    // Load Hammer assets
+    this.load.image('spr_hammer','Hammer.png');
+    this.load.image('spr_anvil','anvil.png');
+    this.load.image('spr_hitbox_large','spr_hitbox_large.png');
+    this.load.image('spr_hitbox_small','spr_hitbox_small.png')
+
+    // Load Environment assets
+    this.load.image('spr_ground','spr_ground.png');
+
+    // Load Sword Assets
+    this.load.image('sword1', 'sword2.png')
+
+    this.load.image('sword2', 'sword3.png')
+    
+    this.load.image('star', 'star2.png')
   }
 
   create(){

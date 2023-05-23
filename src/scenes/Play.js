@@ -4,41 +4,13 @@ class Play extends Phaser.Scene{
     }
 
     preload(){
-        this.load.setPath("./assets/");
-
-        // Load Hammer assets
-        this.load.image('spr_hammer','Hammer.png');
-        this.load.image('spr_anvil','anvil.png');
-        this.load.image('spr_hitbox_large','spr_hitbox_large.png');
-        this.load.image('spr_hitbox_small','spr_hitbox_small.png')
-
-        // Load Environment assets
-        this.load.image('spr_ground','spr_ground.png');
-
-        // Load Sword Assets
-        this.load.image('sword1', 'sword2.png')
-
-        this.load.image('sword2', 'sword3.png')
-        
-        this.load.image('star', 'star2.png')
 
         this.input.enabled = true;
-
-        this.hammerFreezeRotation = false;
-
-        this.hammerCurrentRotation = false;
 
         // Set up combo font
         this.totalSwordsBuilt = 0;
         this.currentCombo = 0;
         this.largestCombo = 0;
-
-        // Set up hammer miss tracker
-        this.hammerMissFlint = false // Flips to true when hammer sticking up, about to swing down
-        // Once hammer goes down, if above variable is still true then combo resets. set back to false when star hit
-
-        this.hammerflipProtection = false;
-        // This enables once you hit a star, the hammer must point bottom to disable.
 
         // display score
         this.mainText = {
@@ -47,22 +19,17 @@ class Play extends Phaser.Scene{
             color: '#313638',
             align: 1
         }
-
-
     }
 
     create(){
-        this.createHammer(800,0);
 
-        // Connect large and small hitbox
-        this.matter.add.joint(this.hitbox_large, this.hitbox_small, 150, 0.2);
+        // Create Hammer
+        this.hammer = new Hammer(this,800,0,'spr_hammer',0);
 
-        // Setup mouse interaction with Physics objects
-        this.matter.add.mouseSpring({
-            length: 0.01,
-            stiffness: 1,
-            angularStiffness: 1,
-        });
+        // Create Ground
+        this.ground = this.matter.add.image(896/2, 656, 'spr_ground', null, { 
+            shape: 'rectangle',  isStatic:true
+        }).setScale(2);
 
         // Create sword
 
@@ -137,13 +104,10 @@ class Play extends Phaser.Scene{
 
         //game over variable
         this.gameOver = false;
-
-        
-
     }
  
     update(){
-        this.updateHammer();
+        this.hammer.update();
         
         //randomize spawning sword
         if(this.sword1Despawned && this.sword2Despawned){   
@@ -169,34 +133,7 @@ class Play extends Phaser.Scene{
             }
         }
 
-        // Check if hammer missed
-        if(Math.abs(this.hammer.angle) < 25){
-            if(this.hammerflipProtection == false){
-                this.hammerMissFlint = true;
-            }
-        }
-        
-        if(Math.abs(this.hammer.angle) > 165){
-            if(this.hammerMissFlint == true && this.hammerflipProtection == false){
-                if(this.currentCombo > this.largestCombo){
-                    this.largestCombo = this.currentCombo;
-                }
-                
-                if(this.currentCombo != 0){
-                    this.combo.text = "Combo Lost";
-                    this.time.delayedCall(600, () => { this.combo.text = "Max: " + this.largestCombo; }, null, this)
-                }
-
-                this.hammerMissFlint = false;
-                this.currentCombo = 0;
-            }
-
-            if(this.hammerflipProtection == true){
-                this.hammerMissFlint = false;
-                this.hammerflipProtection = false;
-            }
-        }
-        
+   
         
 
         //condition to spawn star
@@ -301,8 +238,8 @@ class Play extends Phaser.Scene{
                                 
                                 this.currentCombo += 1;
                                 this.combo.text = this.currentCombo + "x";
-                                this.hammerMissFlint = false;
-                                this.hammerflipProtection = true;
+
+                                this.hammer.onHit();
                                 
                                 this.despawnStar()
                                 if(this.prog == 4){
@@ -323,79 +260,8 @@ class Play extends Phaser.Scene{
     }
 
 
-    createHammer(x,y){
+  
 
-        this.matter.world.setBounds();
-
-        this.hitbox_large = this.matter.add.image(x-20, 0, 'spr_hitbox_large', null, { 
-            shape: 'rectangle', friction: 0.005, restitution: 0.6, density: 0.01
-         }).setVisible(false);
-
-        this.hitbox_small = this.matter.add.image(x-200, y+400, 'spr_hitbox_small', null, { 
-            shape: 'circle', friction: 0.005, restitution: 0.6, density: 0.05, label: 'hammerHead'
-         }).setVisible(false);
-
-        this.ground = this.matter.add.image(896/2, 656, 'spr_ground', null, { 
-            shape: 'rectangle',  isStatic:true
-         }).setScale(2);
-
-        // Create actual hammer
-        this.hammer = new Hammer(this,x,y,'spr_hammer').setScale(0.25).setOrigin(0.5,0.1).setDepth(10);
-
-        this.hammer.setInteractive();
-
-        this.input.on('pointerup', ()=>{
-            this.hammerFreezeRotation = false;
-            if(this.hammer.angle < 0){
-                this.hammerCurrentRotation = true;
-            }else{
-                this.hammerCurrentRotation = false;
-            }
-        })
-
-        this.hammer.on('pointerdown', ()=>{
-            this.hammerFreezeRotation = true;
-            if(this.hammer.angle < 0){
-                this.hammerCurrentRotation = true;
-            }else{
-                this.hammerCurrentRotation = false;
-            }
-        })  
-
-        // Connect large and small hitbox
-        this.matter.add.joint(this.hitbox_large, this.hitbox_small, 150, 0.2);
-
-        // Setup mouse interaction with Physics objects
-        this.matter.add.mouseSpring({
-            length: 0.01,
-            stiffness: 1,
-            angularStiffness: 1,
-        });
-
-    }
-
-    updateHammer(){
-        // Prevent hitboxes from rotating, help makes cursor movement smooth and rigid to mouse pos
-        if(this.hammerFreezeRotation == true){
-            if(this.hammerCurrentRotation == true){
-                this.hitbox_large.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(game.input.mousePointer.x,game.input.mousePointer.y,this.hitbox_small.x,this.hitbox_small.y)) + 180;
-            }else{
-                this.hitbox_large.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(game.input.mousePointer.x,game.input.mousePointer.y,this.hitbox_small.x,this.hitbox_small.y));
-            }
-        }else{
-            this.hitbox_large.angle = 0;
-        }
-
-        this.hitbox_small.angle = 0;
-
-        // Move Hammer to correct spot
-        this.hammer.x = this.hitbox_small.x;
-        this.hammer.y = this.hitbox_small.y;
-
-        // Rotate to face away from center point
-        let RadAngle = Phaser.Math.Angle.Between(this.hitbox_small.x,this.hitbox_small.y,this.hitbox_large.x,this.hitbox_large.y);
-        this.hammer.angle = Phaser.Math.RadToDeg(RadAngle) - 90;
-    }
 
     despawnStar(){
         this.star1.x = -50
