@@ -47,6 +47,8 @@ class Play extends Phaser.Scene{
             color: '#313638',
             align: 1
         }
+
+
     }
 
     create(){
@@ -120,7 +122,24 @@ class Play extends Phaser.Scene{
         this.scoreLeft = this.add.text(896 - 150, 32,this.totalSwordsBuilt + " sword", this.mainText).setOrigin(0.5,0.5)
         this.mainText.fontSize = 40;
         this.mainText.color = '#4D5558'
-        this.combo = this.add.text(896 - 150, 64 + 12,"", this.mainText).setOrigin(0.5,0.5);
+        this.combo = this.add.text(896 - 150, 64 + 12 + 46,"", this.mainText).setOrigin(0.5,0.5);
+
+        //clock
+        this.clockTime = 60;
+        this.clockRightCounter = Math.floor(this.clockTime);
+        this.addedTime = 0;
+        this.scoreRight = this.add.text(896 - 150, 64 + 12, this.clockRightCounter + ' seconds', this.mainText).setOrigin(0.5,0.5);
+        //this.scoreRight.fixedWidth = 0;
+        //this.scoreRight.align = 'right';
+
+        this.initTime = this.time.now;
+        
+
+        //game over variable
+        this.gameOver = false;
+
+        
+
     }
  
     update(){
@@ -129,7 +148,7 @@ class Play extends Phaser.Scene{
         //randomize spawning sword
         if(this.sword1Despawned && this.sword2Despawned){   
             
-            if(Math.floor(Math.random()*2) == 0){
+            if(Math.floor(Math.random()*2) == 1){
                 this.spawnSword1 = true;
             } else{
                 this.spawnSword2 = true;
@@ -162,7 +181,7 @@ class Play extends Phaser.Scene{
                 if(this.currentCombo > this.largestCombo){
                     this.largestCombo = this.currentCombo;
                 }
-
+                
                 if(this.currentCombo != 0){
                     this.combo.text = "Combo Lost";
                     this.time.delayedCall(600, () => { this.combo.text = "Max: " + this.largestCombo; }, null, this)
@@ -214,8 +233,8 @@ class Play extends Phaser.Scene{
                 this.star1.y = this.sword1.y + 40 - (Math.random()*140)
             }   
             if(!this.sword2Despawned){
-                this.star1.x = this.sword2.x - 13 + (Math.random()*30)
-                this.star1.y = this.sword2.y + 40 - (Math.random()*140)
+                this.star1.x = this.sword2.x - 30 + (Math.random()*80)
+                this.star1.y = this.sword2.y + 75 - (Math.random()*220)
             }   
 
             this.star1.angle = Math.random() * 90
@@ -229,6 +248,16 @@ class Play extends Phaser.Scene{
         if(Phaser.Input.Keyboard.JustDown(keyR)){
             this.despawnStar()
         }    
+
+        //clock
+        if(!this.gameOver){
+            this.clockRightCounter = Math.floor(this.clockTime) - Math.floor((this.time.now-this.initTime)/1000) + Math.floor(this.addedTime);
+            this.scoreRight.text = this.clockRightCounter + ' seconds';
+        }
+        if(this.clockRightCounter <= 0){
+            this.clockRightCounter = 0
+            this.gameOver = true
+        }
     }
 
     setupCollision(){
