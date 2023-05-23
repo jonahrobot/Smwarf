@@ -181,7 +181,7 @@ class Play extends Phaser.Scene{
                 if(this.currentCombo > this.largestCombo){
                     this.largestCombo = this.currentCombo;
                 }
-
+                
                 if(this.currentCombo != 0){
                     this.combo.text = "Combo Lost";
                     this.time.delayedCall(600, () => { this.combo.text = "Max: " + this.largestCombo; }, null, this)
