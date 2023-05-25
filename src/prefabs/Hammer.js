@@ -8,7 +8,6 @@ class Hammer extends Phaser.GameObjects.Sprite {
 
         // Initialize in the scene
         scene.add.existing(this);
-        scene.matter.world.setBounds();
         this.setInteractive();
 
         // Set up Trackers
