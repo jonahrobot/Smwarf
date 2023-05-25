@@ -14,7 +14,7 @@ let config = {
     physics: {
       default: 'matter',
       matter: {
-        debug: false
+        debug: true
       }
     },
     scene: [ Menu, Tutorial, Play ]
