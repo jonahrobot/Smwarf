@@ -265,10 +265,6 @@ class Play extends Phaser.Scene{
         });
     }
 
-
-  
-
-
     despawnStar(){
         this.star1.x = -50
         this.star1.y = -50

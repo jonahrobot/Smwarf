@@ -8,7 +8,6 @@ class Hammer extends Phaser.GameObjects.Sprite {
 
         // Initialize in the scene
         scene.add.existing(this);
-        scene.matter.world.setBounds();
         this.setInteractive();
 
         // Set up Trackers
@@ -23,15 +22,15 @@ class Hammer extends Phaser.GameObjects.Sprite {
         }).setVisible(false);
 
         this.hitbox_small = scene.matter.add.image(x-200, y+400, 'spr_hitbox_small', null, { 
-            shape: 'circle', friction: 0.005, restitution: 0.6, density: 0.05, label: 'hammerHead'
+            shape: 'circle', friction: 0.005, restitution: 0.6, density: 0.05, label: 'hammerHead', ignorePointer: true
         }).setVisible(false);
 
         // Connect large and small hitbox
-        scene.matter.add.joint(this.hitbox_large, this.hitbox_small, 150, 0.2);
+        scene.matter.add.joint(this.hitbox_large, this.hitbox_small, 200, 0.2);
 
         // Set small properties
 
-        this.setScale(0.25).setOrigin(0.5,0.1).setDepth(10);
+        this.setOrigin(0.5,0.1).setDepth(10);
 
         // Set up interactions
         scene.input.on('pointerup', ()=>{
@@ -43,7 +42,7 @@ class Hammer extends Phaser.GameObjects.Sprite {
             }
         })
 
-        this.on('pointerdown', ()=>{
+        this.hitbox_large.on('pointerdown', ()=>{
             this.hammerFreezeRotation = true;
             if(this.angle < 0){
                 this.hammerCurrentRotation = true;
@@ -53,8 +52,6 @@ class Hammer extends Phaser.GameObjects.Sprite {
         })  
 
         // Add mouse spring
-
-        // Setup mouse interaction with Physics objects
         scene.matter.add.mouseSpring({
             length: 0.01,
             stiffness: 1,
