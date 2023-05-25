@@ -57,6 +57,10 @@ class Hammer extends Phaser.GameObjects.Sprite {
             stiffness: 1,
             angularStiffness: 1,
         });
+
+        // fail sound
+        this.failSFX = scene.sound.add('fail');
+
     }  
 
     update(){
@@ -97,6 +101,7 @@ class Hammer extends Phaser.GameObjects.Sprite {
                 
                 if(this.scene.currentCombo != 0){
                     this.scene.combo.text = "Combo Lost";
+                    this.failSFX.play();
                     this.scene.time.delayedCall(600, () => { this.scene.combo.text = "Max: " + this.scene.largestCombo; }, null, this)
                 }
 

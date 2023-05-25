@@ -34,6 +34,8 @@ class Play extends Phaser.Scene{
         this.load.audio('ding11', './assets/eding_D_flat149.mp3');
         this.load.audio('ding12', './assets/eding_D_minor149.mp3');
         this.load.audio('ding13', './assets/eding_E_flat149.mp3');
+        this.load.audio('fail', './assets/fail.wav');
+
     }
 
     create(){
@@ -122,7 +124,7 @@ class Play extends Phaser.Scene{
  
     update(){
         this.hammer.update();
-        
+
         //randomize spawning sword
         if(this.sword1Despawned && this.sword2Despawned){   
             
@@ -146,9 +148,6 @@ class Play extends Phaser.Scene{
                 this.spawnSword2 = false
             }
         }
-
-   
-        
 
         //condition to spawn star
         if(this.starDespawned){
