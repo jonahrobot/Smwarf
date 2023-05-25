@@ -19,6 +19,10 @@ class Play extends Phaser.Scene{
             color: '#313638',
             align: 1
         }
+
+        //  load audio
+        this.load.audio('ding1', './assets/ding_E_flat149.mp3');
+
     }
 
     create(){
@@ -32,7 +36,6 @@ class Play extends Phaser.Scene{
         }).setScale(2);
 
         // Create sword
-
         this.add.image(220, game.config.height/2, 'spr_anvil').setScale(0.5)
 
         this.sword1 = this.add.image(-100, game.config.height/2, 'sword1').setScale(0.5)
@@ -142,7 +145,10 @@ class Play extends Phaser.Scene{
             this.spawnStar = true;
             this.prog++;
             console.log(this.prog);
-            if (this.prog == 0) {
+            if (this.currentCombo == 0) {    // hammer sound
+                this.sound.play('ding1');
+            }
+            if (this.prog == 0) {   // progress bar
                 this.progUI1.setVisible(false);
                 this.progUI2.setVisible(false);
                 this.progUI3.setVisible(false);
