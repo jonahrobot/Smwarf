@@ -31,7 +31,7 @@ class Hammer extends Phaser.GameObjects.Sprite {
 
         // Set small properties
 
-        this.setScale(0.25).setOrigin(0.5,0.1).setDepth(10);
+        this.setOrigin(0.5,0.1).setDepth(10);
 
         // Set up interactions
         scene.input.on('pointerup', ()=>{
