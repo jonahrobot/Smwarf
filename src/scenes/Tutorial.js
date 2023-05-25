@@ -36,7 +36,7 @@ class Tutorial extends Phaser.Scene{
     update(){
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             this.scene.start('playScene');    
-          }
+        }
     }
 
 }

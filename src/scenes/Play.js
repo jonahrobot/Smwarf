@@ -59,6 +59,7 @@ class Play extends Phaser.Scene{
 
         //keboard input
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
 
         this.prog = 0;
         var textConfig = { 
@@ -92,7 +93,7 @@ class Play extends Phaser.Scene{
         this.combo = this.add.text(896 - 150, 64 + 12 + 46,"", this.mainText).setOrigin(0.5,0.5);
 
         //clock
-        this.clockTime = 5;
+        this.clockTime = 5 //amt of seconds on the clock
         this.clockRightCounter = Math.floor(this.clockTime);
         this.addedTime = 0;
         this.scoreRight = this.add.text(896 - 150, 64 + 12, this.clockRightCounter + ' seconds', this.mainText).setOrigin(0.5,0.5);
@@ -182,11 +183,7 @@ class Play extends Phaser.Scene{
             this.star2.angle = this.star1.angle
 
             this.spawnStar = false
-        }
-
-        if(Phaser.Input.Keyboard.JustDown(keyR)){
-            this.despawnStar()
-        }    
+        }  
 
         //clock
         if(!this.gameOver){
@@ -198,14 +195,26 @@ class Play extends Phaser.Scene{
             this.gameOver = true
         }
 
+        //game Over screen
         if(this.gameOver && !this.gameOverScreen){
             highestScore = this.totalSwordsBuilt
             highestCombo = this.largestCombo
+            this.mainText.color = '#797EF6'
             this.add.text(game.config.width/2, 3*game.config.height/8 + borderUISize + borderPadding, 'High Score: ' + highestScore, this.mainText).setOrigin(0.5)
             this.add.text(game.config.width/2, 4*game.config.height/8 + borderUISize + borderPadding, 'Highest Combo: ' + this.largestCombo, this.mainText).setOrigin(0.5)
             this.mainText.fontSize = 20
             this.add.text(game.config.width/2, 5*game.config.height/8 + borderUISize + borderPadding, '"->" to look at other high scores or "r" to restart', this.mainText).setOrigin(0.5)
             this.gameOverScreen = true;
+        }
+
+        //game Over restart
+        if(Phaser.Input.Keyboard.JustDown(keyR) && this.gameOver){
+            this.scene.restart()
+        }  
+
+        //game Over next screen
+        if (Phaser.Input.Keyboard.JustDown(keyRIGHT) && this.gameOver) {
+            this.scene.start('leaderboardScene')
         }
     }
 
