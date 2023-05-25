@@ -43,7 +43,7 @@ class Hammer extends Phaser.GameObjects.Sprite {
             }
         })
 
-        this.on('pointerdown', ()=>{
+        this.hitbox_large.on('pointerdown', ()=>{
             this.hammerFreezeRotation = true;
             if(this.angle < 0){
                 this.hammerCurrentRotation = true;
