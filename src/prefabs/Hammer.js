@@ -22,7 +22,7 @@ class Hammer extends Phaser.GameObjects.Sprite {
         }).setVisible(false);
 
         this.hitbox_small = scene.matter.add.image(x-200, y+400, 'spr_hitbox_small', null, { 
-            shape: 'circle', friction: 0.005, restitution: 0.6, density: 0.05, label: 'hammerHead', ignorePointer: true
+            shape: 'rectangle', friction: 0.005, restitution: 0.6, density: 0.05, label: 'hammerHead', ignorePointer: true
         }).setVisible(false);
 
         // Connect large and small hitbox
@@ -42,7 +42,7 @@ class Hammer extends Phaser.GameObjects.Sprite {
             }
         })
 
-        this.hitbox_large.on('pointerdown', ()=>{
+        this.on('pointerdown', ()=>{
             this.hammerFreezeRotation = true;
             if(this.angle < 0){
                 this.hammerCurrentRotation = true;
@@ -69,14 +69,15 @@ class Hammer extends Phaser.GameObjects.Sprite {
         if(this.hammerFreezeRotation == true){
             if(this.hammerCurrentRotation == true){
                 this.hitbox_large.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(game.input.mousePointer.x,game.input.mousePointer.y,this.hitbox_small.x,this.hitbox_small.y)) + 180;
+                this.hitbox_small.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(game.input.mousePointer.x,game.input.mousePointer.y,this.hitbox_small.x,this.hitbox_small.y)) + 90;
             }else{
                 this.hitbox_large.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(game.input.mousePointer.x,game.input.mousePointer.y,this.hitbox_small.x,this.hitbox_small.y));
+                this.hitbox_small.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(game.input.mousePointer.x,game.input.mousePointer.y,this.hitbox_small.x,this.hitbox_small.y)) - 90;
             }
         }else{
             this.hitbox_large.angle = 0;
+            this.hitbox_small.angle = 0;
         }
-
-        this.hitbox_small.angle = 0;
 
         // Move Hammer to correct spot
         this.x = this.hitbox_small.x;
