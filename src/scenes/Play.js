@@ -56,11 +56,11 @@ class Play extends Phaser.Scene{
         this.sword2 = this.add.image(-100, game.config.height/2, 'sword2').setScale(0.5)
 
         this.star1 = this.matter.add.image(-50, -50, 'star', null, {
-            shape: 'rectangle', isStatic: true, isSensor: true,
+            shape: 'circle', isStatic: true, isSensor: true,
         }).setScale(0.1).setDepth(10)
 
         this.star2 = this.matter.add.image(-50, -50, 'star', null, {
-            shape: 'rectangle', isStatic: true,
+            shape: 'circle', isStatic: true,
         }).setScale(0.1)
 
         this.star2.alpha = 0
