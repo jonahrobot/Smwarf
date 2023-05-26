@@ -40,6 +40,8 @@ class Play extends Phaser.Scene{
 
     create(){
 
+        this.matter.world.autoUpdate = false;
+
         // Create Hammer
         this.hammer = new Hammer(this,800,0,'spr_hammer',0);
 
@@ -125,7 +127,7 @@ class Play extends Phaser.Scene{
 
     }
  
-    update(){
+    update(time,delta){
         this.hammer.update();
 
         //randomize spawning sword
@@ -256,6 +258,8 @@ class Play extends Phaser.Scene{
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT) && this.gameOver) {
             this.scene.start('leaderboardScene')
         }
+
+        this.matter.world.step(delta);
     }
 
     setupCollision(){
