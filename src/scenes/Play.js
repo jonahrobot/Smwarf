@@ -19,6 +19,23 @@ class Play extends Phaser.Scene{
             color: '#313638',
             align: 1
         }
+
+        //  load audio
+        this.load.audio('ding1', './assets/ding_E_flat149.mp3');
+        this.load.audio('ding2', './assets/ding_E_minor149.mp3');
+        this.load.audio('ding3', './assets/ding_F_minor149.mp3');
+        this.load.audio('ding4', './assets/ding_G_flat149.mp3');
+        this.load.audio('ding5', './assets/ding_G_minor149.mp3');
+        this.load.audio('ding6', './assets/eding_A_flat149.mp3');
+        this.load.audio('ding7', './assets/eding_A_minor149.mp3');
+        this.load.audio('ding8', './assets/eding_B_flat149.mp3');
+        this.load.audio('ding9', './assets/eding_B_minor149.mp3');
+        this.load.audio('ding10', './assets/eding_C_minor149.mp3');
+        this.load.audio('ding11', './assets/eding_D_flat149.mp3');
+        this.load.audio('ding12', './assets/eding_D_minor149.mp3');
+        this.load.audio('ding13', './assets/eding_E_flat149.mp3');
+        this.load.audio('fail', './assets/fail.wav');
+
     }
 
     create(){
@@ -32,7 +49,6 @@ class Play extends Phaser.Scene{
         }).setScale(2);
 
         // Create sword
-
         this.add.image(220, game.config.height/2, 'spr_anvil').setScale(0.5)
 
         this.sword1 = this.add.image(-100, game.config.height/2, 'sword1').setScale(0.5)
@@ -111,7 +127,7 @@ class Play extends Phaser.Scene{
  
     update(){
         this.hammer.update();
-        
+
         //randomize spawning sword
         if(this.sword1Despawned && this.sword2Despawned){   
             
@@ -136,16 +152,40 @@ class Play extends Phaser.Scene{
             }
         }
 
-   
-        
-
         //condition to spawn star
         if(this.starDespawned){
             this.starDespawned = false;
             this.spawnStar = true;
             this.prog++;
             console.log(this.prog);
-            if (this.prog == 0) {
+            if (this.currentCombo == 1) {    // hammer sound
+                this.sound.play('ding1');
+            } else if (this.currentCombo == 2) {
+                this.sound.play('ding2');
+            } else if (this.currentCombo == 3) {
+                this.sound.play('ding3');
+            } else if (this.currentCombo == 4) {
+                this.sound.play('ding4');
+            } else if (this.currentCombo == 5) {
+                this.sound.play('ding5');
+            } else if (this.currentCombo == 6) {
+                this.sound.play('ding6');
+            } else if (this.currentCombo == 7) {
+                this.sound.play('ding7');
+            } else if (this.currentCombo == 8) {
+                this.sound.play('ding8');
+            } else if (this.currentCombo == 9) {
+                this.sound.play('ding9');
+            } else if (this.currentCombo == 10) {
+                this.sound.play('ding10');
+            } else if (this.currentCombo == 11) {
+                this.sound.play('ding11');
+            } else if (this.currentCombo == 12) {
+                this.sound.play('ding12');
+            } else if (this.currentCombo >= 13) {
+                this.sound.play('ding13');
+            }
+            if (this.prog == 0) {   // progress bar
                 this.progUI1.setVisible(false);
                 this.progUI2.setVisible(false);
                 this.progUI3.setVisible(false);
@@ -280,10 +320,6 @@ class Play extends Phaser.Scene{
 
         });
     }
-
-
-  
-
 
     despawnStar(){
         this.star1.x = -50
