@@ -117,6 +117,7 @@ class Play extends Phaser.Scene{
         //this.scoreRight.align = 'right';
 
         this.initTime = this.time.now;
+        
         var boxConfig = { 
             fontFamily: 'font1',
             fontSize: '28px',
@@ -137,6 +138,12 @@ class Play extends Phaser.Scene{
         this.gameOver = false;
         this.gameOverScreen = false;
 
+        //tutorial variable
+        this.tutorial = true
+
+        this.hand = this.add.sprite(game.config.width/5 * 4 + 40, game.config.height/5*4, 'hand')
+        this.hand.angle = 140
+        this.hand.alpha = 1
     }
 
     update(){
@@ -250,8 +257,20 @@ class Play extends Phaser.Scene{
             this.spawnStar = false
         }  
 
+        //tutorial
+        if(this.tutorial == true){
+            this.hammer.on('pointerdown',()=>{
+                if(this.tutorial){
+                    this.hand.alpha = 0
+                    this.tutorial = false
+                    this.initTime = this.time.now
+                }
+            })
+        }
+
+
         //clock
-        if(!this.gameOver){
+        if(!this.gameOver && !this.tutorial){
             this.clockRightCounter = Math.floor(this.clockTime) - Math.floor((this.time.now-this.initTime)/1000) + Math.floor(this.addedTime);
             this.scoreRight.text = this.clockRightCounter + ' seconds';
         }
@@ -271,6 +290,14 @@ class Play extends Phaser.Scene{
             this.add.text(game.config.width/2, 5*game.config.height/8 + borderUISize + borderPadding, '"->" to look at other high scores or "r" to restart', this.mainText).setOrigin(0.5)
             this.gameOverScreen = true;
         }
+
+        //game Over restart
+        if(Phaser.Input.Keyboard.JustDown(keyR) && !this.gameOver){
+            this.hammer.hitbox_large.x = 800 - 20
+            this.hammer.hitbox_large.y = 0
+            this.hammer.hitbox_small.x = 800 - 200
+            this.hammer.hitbox_small.y = 0 + 400
+        }  
 
         //game Over restart
         if(Phaser.Input.Keyboard.JustDown(keyR) && this.gameOver){
