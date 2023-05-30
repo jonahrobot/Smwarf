@@ -262,11 +262,13 @@ class Play extends Phaser.Scene{
         }  
 
         //tutorial
-        if(this.tutorial){
+        if(this.tutorial == true){
             this.hammer.on('pointerdown',()=>{
-                this.hand.alpha = 0
-                this.tutorial = false
-                this.initTime = this.time.now
+                if(this.tutorial){
+                    this.hand.alpha = 0
+                    this.tutorial = false
+                    this.initTime = this.time.now
+                }
             })
         }
 
