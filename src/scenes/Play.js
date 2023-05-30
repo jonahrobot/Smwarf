@@ -300,17 +300,19 @@ class Play extends Phaser.Scene{
             this.gameOverScreen = true;
         }
 
-        //game Over restart
-        if(Phaser.Input.Keyboard.JustDown(keyR) && !this.gameOver){
-            this.hammer.hitbox_large.x = 800 - 20
-            this.hammer.hitbox_large.y = 0
-            this.hammer.hitbox_small.x = 800 - 200
-            this.hammer.hitbox_small.y = 0 + 400
-        }  
-
-        //game Over restart
-        if(Phaser.Input.Keyboard.JustDown(keyR) && this.gameOver){
-            this.scene.restart()
+     
+        if(Phaser.Input.Keyboard.JustDown(keyR)){
+            //reset hammer
+            if(!this.gameOver){    
+                this.hammer.hitbox_large.x = 800 - 20
+                this.hammer.hitbox_large.y = 0
+                this.hammer.hitbox_small.x = 800 - 200
+                this.hammer.hitbox_small.y = 0 + 400
+            }
+            else{
+                //game over restart
+                this.scene.restart()
+            }
         }  
 
         //game Over next screen
