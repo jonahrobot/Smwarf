@@ -6,7 +6,7 @@ Authors: Dylan Louie, Abel Goy, Jonah Ryan
 
 'use strict';
 let config = {
-    type: Phaser.CANVAS,
+    type: Phaser.WEBGL,
     width: 896,
     height: 640,
     autoCenter: true,
