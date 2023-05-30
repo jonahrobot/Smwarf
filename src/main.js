@@ -6,9 +6,9 @@ Authors: Dylan Louie, Abel Goy, Jonah Ryan
 
 'use strict';
 let config = {
-    type: Phaser.CANVAS,
-    width: 896,
-    height: 640,
+    type: Phaser.WEBGL,
+    width: 1200,
+    height: 800,
     autoCenter: true,
     backgroundColor: '#D5DCF9',
     physics: {

@@ -44,12 +44,12 @@ class Play extends Phaser.Scene{
         this.hammer = new Hammer(this,800,0,'spr_hammer',0);
 
         // Create Ground
-        this.ground = this.matter.add.image(896/2, 656, 'spr_ground', null, { 
+        this.ground = this.matter.add.image(600, 800, 'spr_ground', null, { 
             shape: 'rectangle',  isStatic:true
-        }).setScale(2);
+        }).setScale(3);
 
         // Create sword
-        this.add.image(220, game.config.height/2, 'spr_anvil').setScale(0.5)
+        this.add.image(295, game.config.height/2, 'spr_anvil').setScale(0.5)
 
         this.sword1 = this.add.image(-100, game.config.height/2, 'sword1').setScale(0.5)
 
@@ -123,10 +123,10 @@ class Play extends Phaser.Scene{
             color: '#000000',
             align: 'center',
             padding: {
-                top: 85,
-                bottom: 85,
+                top: 135,
+                bottom: 135,
             },
-            fixedWidth: 310
+            fixedWidth: 400
         }
 
         this.blockBox = this.add.text(0, 0, "Invalid Zone", boxConfig).setOrigin(0);
@@ -138,12 +138,12 @@ class Play extends Phaser.Scene{
  
     update(){
         // Dead zone to prevent dangling exploit
-        if (this.hammer.hitbox_large.x >= 310 || this.hammer.hitbox_large.y >= 200) {
+        if (this.hammer.hitbox_large.x >= 400 || this.hammer.hitbox_large.y >= 300) {
             this.hammer.update();
             this.blockBox.alpha = 0;
         } else {
-            this.hammer.hitbox_large.x = 311
-            this.hammer.hitbox_small.x = 311
+            this.hammer.hitbox_large.x = 401
+            this.hammer.hitbox_small.x = 401
             this.blockBox.alpha = 0.5;
         }
 
