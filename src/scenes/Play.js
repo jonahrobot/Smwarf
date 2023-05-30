@@ -40,6 +40,8 @@ class Play extends Phaser.Scene{
 
     create(){
 
+        this.matter.world.autoUpdate = false;
+
         // Create Hammer
         this.hammer = new Hammer(this,800,0,'spr_hammer',0);
 
@@ -56,11 +58,11 @@ class Play extends Phaser.Scene{
         this.sword2 = this.add.image(-100, game.config.height/2, 'sword2').setScale(0.5)
 
         this.star1 = this.matter.add.image(-50, -50, 'star', null, {
-            shape: 'rectangle', isStatic: true, isSensor: true,
+            shape: 'circle', isStatic: true, isSensor: true,
         }).setScale(0.1).setDepth(10)
 
         this.star2 = this.matter.add.image(-50, -50, 'star', null, {
-            shape: 'rectangle', isStatic: true,
+            shape: 'circle', isStatic: true,
         }).setScale(0.1)
 
         this.star2.alpha = 0
@@ -75,6 +77,7 @@ class Play extends Phaser.Scene{
 
         //keboard input
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
 
         this.prog = 0;
         var textConfig = { 
@@ -108,7 +111,7 @@ class Play extends Phaser.Scene{
         this.combo = this.add.text(896 - 150, 64 + 12 + 46,"", this.mainText).setOrigin(0.5,0.5);
 
         //clock
-        this.clockTime = 60;
+        this.clockTime = 60 //amt of seconds on the clock
         this.clockRightCounter = Math.floor(this.clockTime);
         this.addedTime = 0;
         this.scoreRight = this.add.text(896 - 150, 64 + 12, this.clockRightCounter + ' seconds', this.mainText).setOrigin(0.5,0.5);
@@ -134,8 +137,10 @@ class Play extends Phaser.Scene{
 
         //game over variable
         this.gameOver = false;
+        this.gameOverScreen = false;
+
     }
- 
+
     update(){
         // Dead zone to prevent dangling exploit
         if (this.hammer.hitbox_large.x >= 310 || this.hammer.hitbox_large.y >= 200) {
@@ -249,11 +254,7 @@ class Play extends Phaser.Scene{
             this.star2.angle = this.star1.angle
 
             this.spawnStar = false
-        }
-
-        if(Phaser.Input.Keyboard.JustDown(keyR)){
-            this.despawnStar()
-        }    
+        }  
 
         //clock
         if(!this.gameOver){
@@ -264,6 +265,30 @@ class Play extends Phaser.Scene{
             this.clockRightCounter = 0
             this.gameOver = true
         }
+
+        //game Over screen
+        if(this.gameOver && !this.gameOverScreen){
+            highestScore = this.totalSwordsBuilt
+            highestCombo = this.largestCombo
+            this.mainText.color = '#797EF6'
+            this.add.text(game.config.width/2, 3*game.config.height/8 + borderUISize + borderPadding, 'High Score: ' + highestScore, this.mainText).setOrigin(0.5)
+            this.add.text(game.config.width/2, 4*game.config.height/8 + borderUISize + borderPadding, 'Highest Combo: ' + this.largestCombo, this.mainText).setOrigin(0.5)
+            this.mainText.fontSize = 20
+            this.add.text(game.config.width/2, 5*game.config.height/8 + borderUISize + borderPadding, '"->" to look at other high scores or "r" to restart', this.mainText).setOrigin(0.5)
+            this.gameOverScreen = true;
+        }
+
+        //game Over restart
+        if(Phaser.Input.Keyboard.JustDown(keyR) && this.gameOver){
+            this.scene.restart()
+        }  
+
+        //game Over next screen
+        if (Phaser.Input.Keyboard.JustDown(keyRIGHT) && this.gameOver) {
+            this.scene.start('leaderboardScene')
+        }
+
+        this.matter.world.step(delta);
     }
 
     setupCollision(){
@@ -304,21 +329,22 @@ class Play extends Phaser.Scene{
                         if(blockBody.velocity.x > 2 || blockBody.velocity.y > 2 ){
 
                             this.clock = this.time.delayedCall(100, () => {
-                                
-                                this.currentCombo += 1;
-                                this.combo.text = this.currentCombo + "x";
+                                 if(!this.gameOver){   
+                                    this.currentCombo += 1;
+                                    this.combo.text = this.currentCombo + "x";
 
-                                this.hammer.onHit();
-                                
-                                this.despawnStar()
-                                if(this.prog == 4){
-                                    this.despawnSword(this.sword1)
-                                    this.despawnSword(this.sword2)
-                                    this.prog=-1
+                                    this.hammer.onHit();
+                                    
+                                    this.despawnStar()
+                                    if(this.prog == 4){
+                                        this.despawnSword(this.sword1)
+                                        this.despawnSword(this.sword2)
+                                        this.prog=-1
 
-                                    this.totalSwordsBuilt += 1;
-                                    this.scoreLeft.text = this.totalSwordsBuilt + " sword";
-                                }
+                                        this.totalSwordsBuilt += 1;
+                                        this.scoreLeft.text = this.totalSwordsBuilt + " sword";
+                                    }
+                                 }
                             }, null, this)
                          }
                     }
