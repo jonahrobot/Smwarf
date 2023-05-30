@@ -117,7 +117,21 @@ class Play extends Phaser.Scene{
         //this.scoreRight.align = 'right';
 
         this.initTime = this.time.now;
-        
+        var boxConfig = { 
+            fontFamily: 'font1',
+            fontSize: '28px',
+            backgroundColor: '#ff0000',
+            color: '#000000',
+            align: 'center',
+            padding: {
+                top: 85,
+                bottom: 85,
+            },
+            fixedWidth: 310
+        }
+
+        this.blockBox = this.add.text(0, 0, "Invalid Zone", boxConfig).setOrigin(0);
+        this.blockBox.alpha = 0;
 
         //game over variable
         this.gameOver = false;
@@ -126,8 +140,23 @@ class Play extends Phaser.Scene{
     }
  
     update(){
-        this.hammer.update();
+        // Dead zone to prevent dangling exploit
+        if (this.hammer.hitbox_large.x >= 310 || this.hammer.hitbox_large.y >= 200) {
+            this.hammer.update();
+            this.blockBox.alpha = 0;
+        } else {
+            this.hammer.hitbox_large.x = 311
+            this.hammer.hitbox_small.x = 311
+            this.blockBox.alpha = 0.5;
+        }
 
+        console.log(this.hammer.hitbox_large.x);
+        console.log(this.hammer.hitbox_large.y);
+
+        /*if (this.hammer.hitbox_large.x <= 300) {
+            this.hammer.hitbox_large.x = 400;
+            this.hammer.hitbox_small.x = 400;
+        }*/
         //randomize spawning sword
         if(this.sword1Despawned && this.sword2Despawned){   
             
