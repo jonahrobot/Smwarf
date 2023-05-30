@@ -117,6 +117,7 @@ class Play extends Phaser.Scene{
         //this.scoreRight.align = 'right';
 
         this.initTime = this.time.now;
+        
         var boxConfig = { 
             fontFamily: 'font1',
             fontSize: '28px',
@@ -137,6 +138,12 @@ class Play extends Phaser.Scene{
         this.gameOver = false;
         this.gameOverScreen = false;
 
+        //tutorial variable
+        this.tutorial = true
+
+        this.hand = this.add.sprite(game.config.width/5 * 4 + 40, game.config.height/5*4, 'hand')
+        this.hand.angle = 140
+        this.hand.alpha = 1
     }
  
     update(){
@@ -254,8 +261,18 @@ class Play extends Phaser.Scene{
             this.spawnStar = false
         }  
 
+        //tutorial
+        if(this.tutorial){
+            this.hammer.on('pointerdown',()=>{
+                this.hand.alpha = 0
+                this.tutorial = false
+                this.initTime = this.time.now
+            })
+        }
+
+
         //clock
-        if(!this.gameOver){
+        if(!this.gameOver && !this.tutorial){
             this.clockRightCounter = Math.floor(this.clockTime) - Math.floor((this.time.now-this.initTime)/1000) + Math.floor(this.addedTime);
             this.scoreRight.text = this.clockRightCounter + ' seconds';
         }

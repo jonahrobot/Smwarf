@@ -22,6 +22,9 @@ class Menu extends Phaser.Scene{
     
     this.load.image('star', 'star2.png')
 
+    //load tutorial assets
+    this.load.image('hand', 'hand.png')
+
     // load audio
     this.load.audio('fail', './assets/fail.wav');
 
