@@ -40,8 +40,6 @@ class Play extends Phaser.Scene{
 
     create(){
 
-        this.matter.world.autoUpdate = false;
-
         // Create Hammer
         this.hammer = new Hammer(this,800,0,'spr_hammer',0);
 
@@ -154,11 +152,7 @@ class Play extends Phaser.Scene{
 
         console.log(this.hammer.hitbox_large.x);
         console.log(this.hammer.hitbox_large.y);
-
-        /*if (this.hammer.hitbox_large.x <= 300) {
-            this.hammer.hitbox_large.x = 400;
-            this.hammer.hitbox_small.x = 400;
-        }*/
+        
         //randomize spawning sword
         if(this.sword1Despawned && this.sword2Despawned){   
             
@@ -288,7 +282,7 @@ class Play extends Phaser.Scene{
             this.scene.start('leaderboardScene')
         }
 
-        this.matter.world.step(delta);
+        //this.matter.world.step(delta);
     }
 
     setupCollision(){
