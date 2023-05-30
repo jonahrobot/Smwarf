@@ -18,11 +18,11 @@ class Hammer extends Phaser.GameObjects.Sprite {
 
         // Create Hitboxes
         this.hitbox_large = scene.matter.add.image(x-20, 0, 'spr_hitbox_large', null, { 
-            shape: 'rectangle', friction: 0.005, restitution: 0.6, density: 0.1
+            shape: 'rectangle', friction: 0.005, restitution: 0.6, density: 0.01
         }).setVisible(false);
 
         this.hitbox_small = scene.matter.add.image(x-200, y+400, 'spr_hitbox_small', null, { 
-            shape: 'rectangle', friction: 0.005, restitution: 0.6, density: 0.1, label: 'hammerHead', ignorePointer: true
+            shape: 'circle', friction: 0.005, restitution: 0.6, density: 0.05, label: 'hammerHead', ignorePointer: true
         }).setVisible(false);
 
         // Connect large and small hitbox
