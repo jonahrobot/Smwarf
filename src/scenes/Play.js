@@ -38,7 +38,28 @@ class Play extends Phaser.Scene{
 
     }
 
+    addScore(name, value){
+
+        let i = 0;
+        while(i < this.highScoreValues.length && value < this.highScoreValues[i]){
+            i++;
+        }
+
+        this.highScoreValues.splice(i,0,value);
+        this.highScoreNames.splice(i,0,name);
+
+        localStorage.setItem('values', JSON.stringify(this.highScoreValues));
+        localStorage.setItem('names', JSON.stringify(this.highScoreNames));
+    }
+
     create(){
+    
+        // this.highSCoreNames[4] score is this.highScoreValues[4]
+        this.highScoreNames = JSON.parse(localStorage.getItem('names'));
+        this.highScoreValues = JSON.parse(localStorage.getItem('values'));
+
+        console.log(this.highScoreNames);
+        console.log(this.highScoreValues);
 
         // Create Hammer
         this.hammer = new Hammer(this,800,0,'spr_hammer',0);
@@ -156,9 +177,6 @@ class Play extends Phaser.Scene{
             this.hammer.hitbox_small.x = 311
             this.blockBox.alpha = 0.5;
         }
-
-        console.log(this.hammer.hitbox_large.x);
-        console.log(this.hammer.hitbox_large.y);
         
         //randomize spawning sword
         if(this.sword1Despawned && this.sword2Despawned){   

@@ -28,6 +28,8 @@ class Menu extends Phaser.Scene{
     // load audio
     this.load.audio('fail', './assets/fail.wav');
 
+    
+
   }
 
   create(){
