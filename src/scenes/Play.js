@@ -47,16 +47,30 @@ class Play extends Phaser.Scene{
 
         this.highScoreValues.splice(i,0,value);
         this.highScoreNames.splice(i,0,name);
+        this.lastScoreAdded = name;
 
         localStorage.setItem('values', JSON.stringify(this.highScoreValues));
         localStorage.setItem('names', JSON.stringify(this.highScoreNames));
+        localStorage.setItem('last', this.lastScoreAdded);
     }
 
     create(){
     
+        localStorage.removeItem('values');
+        localStorage.removeItem('names');
+        localStorage.removeItem('last');
+
         // this.highSCoreNames[4] score is this.highScoreValues[4]
         this.highScoreNames = JSON.parse(localStorage.getItem('names'));
+        if(this.highScoreNames == null){ this.highScoreNames = []; }
         this.highScoreValues = JSON.parse(localStorage.getItem('values'));
+        if(this.highScoreValues == null){ this.highScoreValues = []; }
+        this.lastScoreAdded =localStorage.getItem('last');
+        
+        this.addScore("TEV",10)
+        this.addScore("DEV",100)
+        this.addScore("APP",10)
+        this.addScore("JOP",1)
 
         console.log(this.highScoreNames);
         console.log(this.highScoreValues);
@@ -130,7 +144,7 @@ class Play extends Phaser.Scene{
         this.combo = this.add.text(896 - 150, 64 + 12 + 46,"", this.mainText).setOrigin(0.5,0.5);
 
         //clock
-        this.clockTime = 60 //amt of seconds on the clock
+        this.clockTime = 1 //amt of seconds on the clock
         this.clockRightCounter = Math.floor(this.clockTime);
         this.addedTime = 0;
         this.scoreRight = this.add.text(896 - 150, 64 + 12, this.clockRightCounter + ' seconds', this.mainText).setOrigin(0.5,0.5);
