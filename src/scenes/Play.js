@@ -146,7 +146,7 @@ class Play extends Phaser.Scene{
         this.combo = this.add.text(896 - 150, 64 + 12 + 46,"", this.mainText).setOrigin(0.5,0.5);
 
         //clock
-        this.clockTime = 1 //amt of seconds on the clock
+        this.clockTime = 60 //amt of seconds on the clock
         this.clockRightCounter = Math.floor(this.clockTime);
         this.addedTime = 0;
         this.scoreRight = this.add.text(896 - 150, 64 + 12, this.clockRightCounter + ' seconds', this.mainText).setOrigin(0.5,0.5);
@@ -207,13 +207,31 @@ class Play extends Phaser.Scene{
             }
 
             if(code === Phaser.Input.Keyboard.KeyCodes.BACKSPACE || code === Phaser.Input.Keyboard.KeyCodes.DELETE){
+                
+                if(this.nameInput.length == 3){
+                    this.type_3_text.text = "";
+                }
+                if(this.nameInput.length == 2){
+                    this.type_2_text.text = "";
+                }
+                if(this.nameInput.length == 1){
+                    this.type_1_text.text = "";
+                }
+
                 this.nameInput = this.nameInput.slice(0, -1);
-                this.type_1_text.text =  this.type_1_text.text.slice(0, -1);
+                
                 return;
             }
 
             if((code >= Phaser.Input.Keyboard.KeyCodes.A && code <= Phaser.Input.Keyboard.KeyCodes.Z) && this.nameInput.length != 3){
                 this.nameInput += String.fromCharCode(code);
+
+                if(this.nameInput == "CUM" || this.nameInput == "TIT" || this.nameInput == "POO" || this.nameInput == "PEE"){
+                    this.nameInput = "";
+                    this.type_1_text.text = "";
+                    this.type_2_text.text = "";
+                    this.type_3_text.text = "";
+                }
             }
             
             this.type_1_text.text = this.nameInput.charAt(0)
