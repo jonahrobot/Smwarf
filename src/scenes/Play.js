@@ -55,6 +55,8 @@ class Play extends Phaser.Scene{
     }
 
     create(){
+
+        this.nameInput = "";
     
         localStorage.removeItem('values');
         localStorage.removeItem('names');
@@ -179,6 +181,45 @@ class Play extends Phaser.Scene{
         this.hand = this.add.sprite(game.config.width/5 * 4 + 40, game.config.height/5*4, 'hand')
         this.hand.angle = 140
         this.hand.alpha = 1
+
+        // Add end buttons
+        this.type_1 = this.add.image(5*game.config.width/8+15, 4*game.config.height/8 ,'spr_end_name_off').setDepth(12).setAlpha(0);
+        this.type_2 = this.add.image(6*game.config.width/8+15, 4*game.config.height/8 ,'spr_end_name_off').setDepth(12).setAlpha(0);
+        this.type_3 = this.add.image(7*game.config.width/8+15, 4*game.config.height/8 ,'spr_end_name_off').setDepth(12).setAlpha(0);
+
+        this.type_1_text = this.add.text(5*game.config.width/8+15, 4*game.config.height/8 ,"",this.mainText).setDepth(13).setAlpha(0).setOrigin(0.5);
+        this.type_2_text = this.add.text(6*game.config.width/8+15, 4*game.config.height/8 ,"",this.mainText).setDepth(13).setAlpha(0).setOrigin(0.5);
+        this.type_3_text = this.add.text(7*game.config.width/8+15, 4*game.config.height/8 ,"",this.mainText).setDepth(13).setAlpha(0).setOrigin(0.5);
+
+        this.input.keyboard.on('keyup', this.anyKey, this);
+    }
+
+    anyKey (event)
+    {
+        //  Only allow A-Z . and -
+        if(this.gameOver && this.gameOverScreen){
+            let code = event.keyCode;
+
+            console.log(String.fromCharCode(code));
+
+            if(code === Phaser.Input.Keyboard.KeyCodes.ENTER && this.nameInput.length == 3){
+                // GO NEXT
+            }
+
+            if(code === Phaser.Input.Keyboard.KeyCodes.BACKSPACE || code === Phaser.Input.Keyboard.KeyCodes.DELETE){
+                this.nameInput = this.nameInput.slice(0, -1);
+                this.type_1_text.text =  this.type_1_text.text.slice(0, -1);
+                return;
+            }
+
+            if((code >= Phaser.Input.Keyboard.KeyCodes.A && code <= Phaser.Input.Keyboard.KeyCodes.Z) && this.nameInput.length != 3){
+                this.nameInput += String.fromCharCode(code);
+            }
+            
+            this.type_1_text.text = this.nameInput.charAt(0)
+            this.type_2_text.text = this.nameInput.charAt(1)
+            this.type_3_text.text = this.nameInput.charAt(2)
+        }
     }
 
     update(){
@@ -311,6 +352,10 @@ class Play extends Phaser.Scene{
             this.gameOver = true
         }
 
+        if(this.gameOver && this.gameOverScreen){
+            
+        }
+
         //game Over screen
         if(this.gameOver && !this.gameOverScreen){
             highestScore = this.totalSwordsBuilt
@@ -345,13 +390,8 @@ class Play extends Phaser.Scene{
             this.mainText.fontSize = 20
             this.add.text(game.config.width/2, 5*game.config.height/8 + borderUISize + borderPadding, '"->" to look at other high scores or "r" to restart', this.mainText).setOrigin(0.5)
            
-            // Add end buttons
-            this.type_1 = this.add.image(5*game.config.width/8+15, 4*game.config.height/8 ,'spr_end_name_off').setDepth(10).setAlpha(0);
-            this.type_2 = this.add.image(6*game.config.width/8+15, 4*game.config.height/8 ,'spr_end_name_off').setDepth(10).setAlpha(0);
-            this.type_3 = this.add.image(7*game.config.width/8+15, 4*game.config.height/8 ,'spr_end_name_off').setDepth(10).setAlpha(0);
-
             this.tween = this.tweens.add({
-                targets: [this.type_1,this.type_2,this.type_3],
+                targets: [this.type_1,this.type_2,this.type_3,this.type_1_text,this.type_2_text,this.type_3_text],
                 alpha: 1,
                 ease: 'Cubic',       // 'Cubic', 'Elastic', 'Bounce', 'Back'
                 duration: 500,
