@@ -33,7 +33,7 @@ class Leaderboard extends Phaser.Scene{
         let offset = 48;
         let prefex = ["1st ","2nd","3rd"]
 
-        for(let i = 0; i < 3; i++){
+        for(let i = 0; i < Math.min(3,this.highScoreNames.length); i++){
             this.add.text(game.config.width/4 + 64, game.config.height/8 + borderUISize + borderPadding + offset, prefex[i] + " "+ this.highScoreNames[i] + "  " + this.highScoreValues[i], this.mainText)
             offset += 64;
         }

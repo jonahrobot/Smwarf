@@ -41,7 +41,7 @@ class Play extends Phaser.Scene{
     addScore(name, value){
 
         let i = 0;
-        while(i < this.highScoreValues.length && value < this.highScoreValues[i]){
+        while(i < this.highScoreValues.length && value <= this.highScoreValues[i]){
             i++;
         }
 
@@ -52,30 +52,31 @@ class Play extends Phaser.Scene{
         localStorage.setItem('values', JSON.stringify(this.highScoreValues));
         localStorage.setItem('names', JSON.stringify(this.highScoreNames));
         localStorage.setItem('last', this.lastScoreAdded);
+
+        console.log(this.highScoreNames);
+        console.log(this.highScoreValues);
+    }
+
+    findRank(value){
+        
+        let i = 0;
+        while(i < this.highScoreValues.length && value <= this.highScoreValues[i]){
+            i++;
+        }
+
+        return i + 1;
     }
 
     create(){
 
         this.nameInput = "";
-    
-        localStorage.removeItem('values');
-        localStorage.removeItem('names');
-        localStorage.removeItem('last');
 
         // this.highSCoreNames[4] score is this.highScoreValues[4]
         this.highScoreNames = JSON.parse(localStorage.getItem('names'));
         if(this.highScoreNames == null){ this.highScoreNames = []; }
         this.highScoreValues = JSON.parse(localStorage.getItem('values'));
         if(this.highScoreValues == null){ this.highScoreValues = []; }
-        this.lastScoreAdded =localStorage.getItem('last');
-        
-        this.addScore("TEV",10)
-        this.addScore("DEV",100)
-        this.addScore("APP",10)
-        this.addScore("JOP",1)
-
-        console.log(this.highScoreNames);
-        console.log(this.highScoreValues);
+        this.lastScoreAdded = localStorage.getItem('last');
 
         // Create Hammer
         this.hammer = new Hammer(this,800,0,'spr_hammer',0);
@@ -146,12 +147,10 @@ class Play extends Phaser.Scene{
         this.combo = this.add.text(896 - 150, 64 + 12 + 46,"", this.mainText).setOrigin(0.5,0.5);
 
         //clock
-        this.clockTime = 60 //amt of seconds on the clock
+        this.clockTime = 20 //amt of seconds on the clock
         this.clockRightCounter = Math.floor(this.clockTime);
         this.addedTime = 0;
         this.scoreRight = this.add.text(896 - 150, 64 + 12, this.clockRightCounter + ' seconds', this.mainText).setOrigin(0.5,0.5);
-        //this.scoreRight.fixedWidth = 0;
-        //this.scoreRight.align = 'right';
 
         this.initTime = this.time.now;
         
@@ -204,6 +203,8 @@ class Play extends Phaser.Scene{
 
             if(code === Phaser.Input.Keyboard.KeyCodes.ENTER && this.nameInput.length == 3){
                 // GO NEXT
+                this.addScore(this.nameInput,this.totalSwordsBuilt);
+                this.scene.start('leaderboardScene')
             }
 
             if(code === Phaser.Input.Keyboard.KeyCodes.BACKSPACE || code === Phaser.Input.Keyboard.KeyCodes.DELETE){
@@ -219,6 +220,8 @@ class Play extends Phaser.Scene{
                 }
 
                 this.nameInput = this.nameInput.slice(0, -1);
+
+                this.continueText.setAlpha(0.25)
                 
                 return;
             }
@@ -231,6 +234,10 @@ class Play extends Phaser.Scene{
                     this.type_1_text.text = "";
                     this.type_2_text.text = "";
                     this.type_3_text.text = "";
+                }
+
+                if(this.nameInput.length == 3){
+                    this.continueText.setAlpha(1)
                 }
             }
             
@@ -370,9 +377,7 @@ class Play extends Phaser.Scene{
             this.gameOver = true
         }
 
-        if(this.gameOver && this.gameOverScreen){
-            
-        }
+      
 
         //game Over screen
         if(this.gameOver && !this.gameOverScreen){
@@ -385,7 +390,8 @@ class Play extends Phaser.Scene{
             this.mainText.fontSize = 27
             this.highScoreText = this.add.text((game.config.width)*2, 3*game.config.height/8, 'High Score: ' + highestScore, this.mainText).setDepth(11)
             this.highComboText = this.add.text((game.config.width)*2, 3.5*game.config.height/8, 'Highest Combo: ' + this.largestCombo, this.mainText).setDepth(11)
-            this.totalText = this.add.text((game.config.width)*2, 4.25*game.config.height/8, 'You rank 1st', this.mainText).setDepth(11)
+            this.totalText = this.add.text((game.config.width)*2, 4.25*game.config.height/8, 'You rank ' + this.findRank(highestScore) + " of " + (this.highScoreNames.length + 1), this.mainText).setDepth(11)
+            this.continueText = this.add.text(game.config.width*0.75,5*game.config.height/8 + borderUISize + borderPadding, 'Press enter to continue', this.mainText).setOrigin(0.5).setAlpha(0.25).setDepth(20)
 
             this.tween = this.tweens.add({
                 targets: [this.swordBackground],
@@ -406,7 +412,7 @@ class Play extends Phaser.Scene{
             });
 
             this.mainText.fontSize = 20
-            this.add.text(game.config.width/2, 5*game.config.height/8 + borderUISize + borderPadding, '"->" to look at other high scores or "r" to restart', this.mainText).setOrigin(0.5)
+           
            
             this.tween = this.tweens.add({
                 targets: [this.type_1,this.type_2,this.type_3,this.type_1_text,this.type_2_text,this.type_3_text],
@@ -428,16 +434,6 @@ class Play extends Phaser.Scene{
             this.hammer.hitbox_small.x = 800 - 200
             this.hammer.hitbox_small.y = 0 + 400
         }  
-
-        //game Over restart
-        if(Phaser.Input.Keyboard.JustDown(keyR) && this.gameOver){
-            this.scene.restart()
-        }  
-
-        //game Over next screen
-        if (Phaser.Input.Keyboard.JustDown(keyRIGHT) && this.gameOver) {
-            this.scene.start('leaderboardScene')
-        }
 
         //this.matter.world.step(delta);
     }
