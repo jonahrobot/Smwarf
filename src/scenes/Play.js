@@ -315,11 +315,51 @@ class Play extends Phaser.Scene{
         if(this.gameOver && !this.gameOverScreen){
             highestScore = this.totalSwordsBuilt
             highestCombo = this.largestCombo
-            this.mainText.color = '#797EF6'
-            this.add.text(game.config.width/2, 3*game.config.height/8 + borderUISize + borderPadding, 'High Score: ' + highestScore, this.mainText).setOrigin(0.5)
-            this.add.text(game.config.width/2, 4*game.config.height/8 + borderUISize + borderPadding, 'Highest Combo: ' + this.largestCombo, this.mainText).setOrigin(0.5)
+            this.mainText.color = '#000000'
+
+            this.swordBackground = this.add.image(game.config.width*2, 3*game.config.height/8 + borderUISize + borderPadding,'spr_end_background').setDepth(10)
+            
+            this.mainText.fontSize = 27
+            this.highScoreText = this.add.text((game.config.width)*2, 3*game.config.height/8, 'High Score: ' + highestScore, this.mainText).setDepth(11)
+            this.highComboText = this.add.text((game.config.width)*2, 3.5*game.config.height/8, 'Highest Combo: ' + this.largestCombo, this.mainText).setDepth(11)
+            this.totalText = this.add.text((game.config.width)*2, 4.25*game.config.height/8, 'You rank 1st', this.mainText).setDepth(11)
+
+            this.tween = this.tweens.add({
+                targets: [this.swordBackground],
+                x: game.config.width/2 + 32,
+                ease: 'Cubic',       // 'Cubic', 'Elastic', 'Bounce', 'Back'
+                duration: 500,
+                repeat: 0,            // -1: infinity
+                yoyo: false
+            });
+
+            this.tween = this.tweens.add({
+                targets: [this.highComboText,this.highScoreText,this.totalText],
+                x: game.config.width/5,
+                ease: 'Cubic',       // 'Cubic', 'Elastic', 'Bounce', 'Back'
+                duration: 500,
+                repeat: 0,            // -1: infinity
+                yoyo: false
+            });
+
             this.mainText.fontSize = 20
             this.add.text(game.config.width/2, 5*game.config.height/8 + borderUISize + borderPadding, '"->" to look at other high scores or "r" to restart', this.mainText).setOrigin(0.5)
+           
+            // Add end buttons
+            this.type_1 = this.add.image(5*game.config.width/8+15, 4*game.config.height/8 ,'spr_end_name_off').setDepth(10).setAlpha(0);
+            this.type_2 = this.add.image(6*game.config.width/8+15, 4*game.config.height/8 ,'spr_end_name_off').setDepth(10).setAlpha(0);
+            this.type_3 = this.add.image(7*game.config.width/8+15, 4*game.config.height/8 ,'spr_end_name_off').setDepth(10).setAlpha(0);
+
+            this.tween = this.tweens.add({
+                targets: [this.type_1,this.type_2,this.type_3],
+                alpha: 1,
+                ease: 'Cubic',       // 'Cubic', 'Elastic', 'Bounce', 'Back'
+                duration: 500,
+                delay: 500,
+                repeat: 0,            // -1: infinity
+                yoyo: false
+            });
+           
             this.gameOverScreen = true;
         }
 
