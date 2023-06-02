@@ -19,23 +19,6 @@ class Play extends Phaser.Scene{
             color: '#313638',
             align: 1
         }
-
-        //  load audio
-        this.load.audio('ding1', './assets/ding_E_flat149.mp3');
-        this.load.audio('ding2', './assets/ding_E_minor149.mp3');
-        this.load.audio('ding3', './assets/ding_F_minor149.mp3');
-        this.load.audio('ding4', './assets/ding_G_flat149.mp3');
-        this.load.audio('ding5', './assets/ding_G_minor149.mp3');
-        this.load.audio('ding6', './assets/eding_A_flat149.mp3');
-        this.load.audio('ding7', './assets/eding_A_minor149.mp3');
-        this.load.audio('ding8', './assets/eding_B_flat149.mp3');
-        this.load.audio('ding9', './assets/eding_B_minor149.mp3');
-        this.load.audio('ding10', './assets/eding_C_minor149.mp3');
-        this.load.audio('ding11', './assets/eding_D_flat149.mp3');
-        this.load.audio('ding12', './assets/eding_D_minor149.mp3');
-        this.load.audio('ding13', './assets/eding_E_flat149.mp3');
-        this.load.audio('fail', './assets/fail.wav');
-
     }
 
     addScore(name, value){
@@ -147,7 +130,7 @@ class Play extends Phaser.Scene{
         this.combo = this.add.text(896 - 150, 64 + 12 + 46,"", this.mainText).setOrigin(0.5,0.5);
 
         //clock
-        this.clockTime = 20 //amt of seconds on the clock
+        this.clockTime = 60 //amt of seconds on the clock
         this.clockRightCounter = Math.floor(this.clockTime);
         this.addedTime = 0;
         this.scoreRight = this.add.text(896 - 150, 64 + 12, this.clockRightCounter + ' seconds', this.mainText).setOrigin(0.5,0.5);
@@ -248,6 +231,7 @@ class Play extends Phaser.Scene{
     }
 
     update(){
+
         // Dead zone to prevent dangling exploit
         if (this.hammer.hitbox_large.x >= 310 || this.hammer.hitbox_large.y >= 200) {
             this.hammer.update();
@@ -378,7 +362,6 @@ class Play extends Phaser.Scene{
         }
 
       
-
         //game Over screen
         if(this.gameOver && !this.gameOverScreen){
             highestScore = this.totalSwordsBuilt

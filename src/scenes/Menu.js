@@ -32,9 +32,22 @@ class Menu extends Phaser.Scene{
     this.load.image('hand', 'hand.png')
 
     // load audio
-    this.load.audio('fail', './assets/fail.wav');
 
-    
+    //  load audio
+    this.load.audio('ding1', 'ding_E_flat149.mp3');
+    this.load.audio('ding2', 'ding_E_minor149.mp3');
+    this.load.audio('ding3', 'ding_F_minor149.mp3');
+    this.load.audio('ding4', 'ding_G_flat149.mp3');
+    this.load.audio('ding5', '/ding_G_minor149.mp3');
+    this.load.audio('ding6', 'eding_A_flat149.mp3');
+    this.load.audio('ding7', 'eding_A_minor149.mp3');
+    this.load.audio('ding8', 'eding_B_flat149.mp3');
+    this.load.audio('ding9', 'eding_B_minor149.mp3');
+    this.load.audio('ding10', 'eding_C_minor149.mp3');
+    this.load.audio('ding11', 'eding_D_flat149.mp3');
+    this.load.audio('ding12', 'eding_D_minor149.mp3');
+    this.load.audio('ding13', 'eding_E_flat149.mp3');
+    this.load.audio('fail', 'fail.wav');
 
   }
 
