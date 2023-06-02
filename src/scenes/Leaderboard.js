@@ -24,10 +24,8 @@ class Leaderboard extends Phaser.Scene{
         //keboard input
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
-    }
 
-    update(){
-        this.add.text(game.config.width/2, game.config.height/8 + borderUISize + borderPadding, 'LEADERBOARD', this.mainText).setOrigin(0.5)
+         this.add.text(game.config.width/2, game.config.height/8 + borderUISize + borderPadding, 'LEADERBOARD', this.mainText).setOrigin(0.5)
 
         let index = this.highScoreNames.indexOf(this.lastScoreAdded);
         let offset = 48;
@@ -47,9 +45,13 @@ class Leaderboard extends Phaser.Scene{
 
         this.add.text(game.config.width/2, 5*game.config.height/8 + borderUISize + borderPadding + 100, '"r" to restart', this.mainText).setOrigin(0.5)
 
+    }
+
+    update(){
+       
         //game Over next screen
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
-            this.scene.start('playScene')
+            this.scene.start("playScene")
         }
     }
 }
