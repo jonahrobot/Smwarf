@@ -232,6 +232,8 @@ class Play extends Phaser.Scene{
 
     update(){
 
+        console.log(game.loop.actualFps);
+
         // Dead zone to prevent dangling exploit
         if (this.hammer.hitbox_large.x >= 310 || this.hammer.hitbox_large.y >= 200) {
             this.hammer.update();
