@@ -14,9 +14,9 @@ class Menu extends Phaser.Scene{
 
     // Load End Screen Assets
     this.load.image('spr_end_background','spr_end_background.png')
-    this.load.image('spr_end_continue','spr_end_continue.png')
+    //this.load.image('spr_end_continue','spr_end_continue.png')
     this.load.image('spr_end_name_off','spr_end_name_off.png')
-    this.load.image('spr_end_name_on','spr_end_name_on.png')
+    //this.load.image('spr_end_name_on','spr_end_name_on.png')
 
     // Load Environment assets
     this.load.image('spr_ground','spr_ground.png');

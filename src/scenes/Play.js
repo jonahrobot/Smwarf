@@ -130,7 +130,7 @@ class Play extends Phaser.Scene{
         this.combo = this.add.text(896 - 150, 64 + 12 + 46,"", this.mainText).setOrigin(0.5,0.5);
 
         //clock
-        this.clockTime = 60 //amt of seconds on the clock
+        this.clockTime = 1 //amt of seconds on the clock
         this.clockRightCounter = Math.floor(this.clockTime);
         this.addedTime = 0;
         this.scoreRight = this.add.text(896 - 150, 64 + 12, this.clockRightCounter + ' seconds', this.mainText).setOrigin(0.5,0.5);
@@ -232,6 +232,8 @@ class Play extends Phaser.Scene{
 
     update(){
 
+        console.log(game.loop.actualFps);
+        
         // Dead zone to prevent dangling exploit
         if (this.hammer.hitbox_large.x >= 310 || this.hammer.hitbox_large.y >= 200) {
             this.hammer.update();
@@ -366,6 +368,9 @@ class Play extends Phaser.Scene{
         if(this.gameOver && !this.gameOverScreen){
             highestScore = this.totalSwordsBuilt
             highestCombo = this.largestCombo
+
+            console.log("Created")
+
             this.mainText.color = '#000000'
 
             this.swordBackground = this.add.image(game.config.width*2, 3*game.config.height/8 + borderUISize + borderPadding,'spr_end_background').setDepth(10)

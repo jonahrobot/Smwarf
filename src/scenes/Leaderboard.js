@@ -5,13 +5,13 @@ class Leaderboard extends Phaser.Scene{
 
     preload(){
 
+        this.highScoreNames = JSON.parse(localStorage.getItem('names'));
+        this.highScoreValues = JSON.parse(localStorage.getItem('values'));
+        this.lastScoreAdded = localStorage.getItem('last');
+
     }
 
     create(){
-
-        this.highScoreNames = JSON.parse(localStorage.getItem('names'));
-        this.highScoreValues = JSON.parse(localStorage.getItem('values'));
-        this.lastScoreAdded =localStorage.getItem('last');
 
         // display text
         this.mainText = {
