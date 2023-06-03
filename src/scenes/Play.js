@@ -129,14 +129,27 @@ class Play extends Phaser.Scene{
         this.mainText.color = '#4D5558'
         this.combo = this.add.text(896 - 150, 64 + 12 + 46,"", this.mainText).setOrigin(0.5,0.5);
 
+        //respawn hammer 
+        this.mainText.fontSize = 15
+        this.mainText.color = '#D5DCF9'
+        this.respawnText = this.add.text(150, game.config.height-12, "Click R to Respawn the Hammer", this.mainText).setOrigin(0.5,0.5)
+
         //clock
-        this.clockTime = 1 //amt of seconds on the clock
+
+        this.mainText.fontSize = 40
+        this.mainText.color = '#4D5558'
+        this.clockTime = 60 //amt of seconds on the clock
         this.clockRightCounter = Math.floor(this.clockTime);
         this.addedTime = 0;
         this.scoreRight = this.add.text(896 - 150, 64 + 12, this.clockRightCounter + ' seconds', this.mainText).setOrigin(0.5,0.5);
+        //this.scoreRight.fixedWidth = 0;
+        //this.scoreRight.align = 'right';
 
         this.initTime = this.time.now;
         
+        
+        
+
         var boxConfig = { 
             fontFamily: 'font1',
             fontSize: '28px',
@@ -421,9 +434,7 @@ class Play extends Phaser.Scene{
             this.hammer.hitbox_large.y = 0
             this.hammer.hitbox_small.x = 800 - 200
             this.hammer.hitbox_small.y = 0 + 400
-        }  
-
-        //this.matter.world.step(delta);
+        }
     }
 
     setupCollision(){
