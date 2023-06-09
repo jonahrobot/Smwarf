@@ -138,7 +138,7 @@ class Play extends Phaser.Scene{
 
         this.mainText.fontSize = 40
         this.mainText.color = '#4D5558'
-        this.clockTime = 60 //amt of seconds on the clock
+        this.clockTime = 30 //amt of seconds on the clock
         this.clockRightCounter = Math.floor(this.clockTime);
         this.addedTime = 0;
         this.scoreRight = this.add.text(896 - 150, 64 + 12, this.clockRightCounter + ' seconds', this.mainText).setOrigin(0.5,0.5);
@@ -146,9 +146,6 @@ class Play extends Phaser.Scene{
         //this.scoreRight.align = 'right';
 
         this.initTime = this.time.now;
-        
-        
-        
 
         var boxConfig = { 
             fontFamily: 'font1',
