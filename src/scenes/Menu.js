@@ -12,6 +12,11 @@ class Menu extends Phaser.Scene{
     this.load.image('spr_hitbox_large','spr_hitbox_large.png');
     this.load.image('spr_hitbox_small','spr_hitbox_small.png')
 
+    // Load Title Icons
+    this.load.image('spr_continue','spr_continue.png')
+    this.load.image('spr_credits','spr_credits.png')
+    this.load.image('spr_title','spr_title (1).png')
+
     // Load End Screen Assets
     this.load.image('spr_end_background','spr_end_background.png')
     //this.load.image('spr_end_continue','spr_end_continue.png')
@@ -52,33 +57,33 @@ class Menu extends Phaser.Scene{
   }
 
   create(){
-    // display score
-    let menuConfig = {
-        fontFamily: 'Papyrus',
-        fontSize: '30px',
-        backgroundColor: '#B47EE5',
-        color: '#000',
-        align: 'right',
-        padding: {
-            top: 5,
-            bottom: 5,
-        },
-        fixedWidth: 0
-    } 
 
-    //show menu text
-    this.add.text(game.config.width/2, game.config.height/2 - borderUISize*2 - borderPadding*2, 'Smwarf!', menuConfig).setOrigin(0.5);
-    
-    menuConfig.fontSize = '20px'
 
-    this.add.text(game.config.width/2, game.config.height/2, 'By Jonah Ryan, Abel Goy, Dylan Louie', menuConfig).setOrigin(0.5);
-    //menuConfig.backgroundColor = '#A50B5E';
-    menuConfig.color = '#000';
-    this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Press the -> button to continue', menuConfig).setOrigin(0.5);
+    this.add.image(0,64,'spr_title').setOrigin(0)
+
+    this.add.image(0,346,'spr_credits').setOrigin(0)
+
+    this.continue = this.add.image(game.config.width-128,game.config.height-96,'spr_continue').setInteractive({ pixelPerfect: true });
+
 
     // define keys
     keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
     keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+    this.continue.on('pointerdown', ()=>{
+      this.scene.start('playScene'); 
+    })
+
+    this.continue.on('pointermove', (pointer, x, y, event) =>
+    {
+      this.continue.setAlpha(0.5)
+    });
+
+    this.continue.on('pointerout', (pointer, x, y, event) =>
+    {
+      this.continue.setAlpha(1)
+    });
+
   }
 
   update() {

@@ -192,8 +192,6 @@ class Play extends Phaser.Scene{
         if(this.gameOver && this.gameOverScreen){
             let code = event.keyCode;
 
-            console.log(String.fromCharCode(code));
-
             if(code === Phaser.Input.Keyboard.KeyCodes.ENTER && this.nameInput.length == 3){
                 // GO NEXT
                 this.addScore(this.nameInput,this.totalSwordsBuilt);
@@ -241,8 +239,6 @@ class Play extends Phaser.Scene{
     }
 
     update(){
-
-        console.log(game.loop.actualFps);
         
         // Dead zone to prevent dangling exploit
         if (this.hammer.hitbox_large.x >= 310 || this.hammer.hitbox_large.y >= 200) {
@@ -378,8 +374,6 @@ class Play extends Phaser.Scene{
         if(this.gameOver && !this.gameOverScreen){
             highestScore = this.totalSwordsBuilt
             highestCombo = this.largestCombo
-
-            console.log("Created")
 
             this.mainText.color = '#000000'
 
